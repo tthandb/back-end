@@ -4,7 +4,7 @@ const db_config = {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'nodejs'
+  database: 'todo'
 }
 let connection
 const handleDisconnect = () => {
