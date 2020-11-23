@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 19, 2020 at 02:35 PM
+-- Generation Time: Nov 23, 2020 at 04:34 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -73,6 +73,19 @@ CREATE TABLE `projects` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `task_id` int(11) NOT NULL,
+  `task_title` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `create_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -117,6 +130,12 @@ ALTER TABLE `projects`
   ADD PRIMARY KEY (`project_id`);
 
 --
+-- Indexes for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`task_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -144,6 +163,12 @@ ALTER TABLE `products`
 --
 ALTER TABLE `projects`
   MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tasks`
+--
+ALTER TABLE `tasks`
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
