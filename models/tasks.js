@@ -2,38 +2,37 @@
 let db = require("../config/database.js");
 
 module.exports = {
-  createproduct: function (product, callback) {
-    let generatedproducturl = module.exports.generate_product_url(
-      product.product_name
-    );
-    product.product_url = generatedproducturl;
-    db.query("insert into tasks set ?", product, function (error, result) {
+  createTask: (task, callback) => {
+    console.log(task);
+    db.query("insert into tasks set ?", task, function (error, result) {
       if (!error) {
         let data = {
-          task_id: result.insertid,
-          task_name: product.product_name,
+          task_id: result.insertId,
+          task_title: task.task_title,
+          user_id: task.user_id,
         };
         callback(0, data);
       } else callback(error);
     });
   },
   deleteproduct: function (user_id, product_id, callback) {
-    //check for valid user of this product
+    //check for valid user of this task
     module.exports.product_auth(user_id, product_id, function (err, result) {
       if (err) {
         callback(error);
       } else {
         //if valid delete from database
         if (result === true) {
-          db.query("delete from products where id = ?", [product_id], function (
-            error,
-            result
-          ) {
-            if (!error) {
-              //callback
-              callback(0, true);
-            } else callback(error);
-          });
+          db.query(
+            "delete from products where id = ?",
+            [product_id],
+            function (error, result) {
+              if (!error) {
+                //callback
+                callback(0, true);
+              } else callback(error);
+            }
+          );
         } else {
           callback(0, false);
         }
@@ -41,7 +40,7 @@ module.exports = {
     });
   },
   delistproduct: function (user_id, product_id, callback) {
-    //check if product exists or not call self module function using module.exports
+    //check if task exists or not call self module function using module.exports
     module.exports.check_product_exists(product_id, function (err, result) {
       if (err) {
         callback(err);
@@ -98,44 +97,37 @@ module.exports = {
       }
     );
   },
-  updateproduct: function (product, callback) {
-    module.exports.product_auth(product.user_id, product.product_id, function (
-      err,
-      result
-    ) {
-      if (err) {
-        callback(error);
-      } else {
-        if (result === true) {
-          db.query(
-            "update products set ? where id = ?",
-            [
-              {
-                product_name: product.product_name,
-                product_desc: product.product_desc,
-                product_price: product.product_price,
-              },
-              product.product_id,
-            ],
-            function (error, result) {
-              if (!error) {
-                callback(0, result);
-              } else callback(error);
-            }
-          );
+  updateproduct: function (task, callback) {
+    module.exports.product_auth(
+      task.user_id,
+      task.product_id,
+      function (err, result) {
+        if (err) {
+          callback(error);
         } else {
-          callback(0, false);
+          if (result === true) {
+            db.query(
+              "update products set ? where id = ?",
+              [
+                {
+                  product_name: task.product_name,
+                  product_desc: task.product_desc,
+                  product_price: task.product_price,
+                },
+                task.product_id,
+              ],
+              function (error, result) {
+                if (!error) {
+                  callback(0, result);
+                } else callback(error);
+              }
+            );
+          } else {
+            callback(0, false);
+          }
         }
       }
-    });
-  },
-  generate_product_url: function (product_name) {
-    let chars =
-      "0123456789abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz@#$&";
-    let result = "";
-    for (let i = 6; i > 0; --i)
-      result += chars[math.floor(math.random() * chars.length)];
-    return product_name + "-" + result;
+    );
   },
   product_auth: function (user_id, product_id, callback) {
     db.query(

@@ -7,16 +7,14 @@ module.exports = (response) => {
         JSON.stringify({
           status: 200,
           success: true,
-          message: "APIs Homepage",
+          message: "Homepage",
         })
       );
     },
     signUp: (postData, apiKey) => {
       if (
-        postData.user_role != undefined &&
-        postData.user_role != null &&
-        postData.email != undefined &&
-        postData.email != null &&
+        postData.username != undefined &&
+        postData.username != null &&
         postData.password != undefined &&
         postData.password != null
       ) {
@@ -73,10 +71,10 @@ module.exports = (response) => {
       }
     },
     signIn: (userData, apiKey) => {
-      console.log(userData.email, userData.password);
+      console.log(userData.username, userData.password);
       if (
-        userData.email == undefined ||
-        userData.email == null ||
+        userData.username == undefined ||
+        userData.username == null ||
         userData.password ||
         null ||
         userData.password == undefined

@@ -8,7 +8,7 @@ module.exports = {
       if (!error) {
         let data = {
           user_id: result.insertId,
-          email: userData.email,
+          username: userData.username,
           auth_token: userData.auth_token,
         };
         callback(0, data);
@@ -24,10 +24,10 @@ module.exports = {
     return result;
   },
   login: (userData, callback) => {
-    console.log(userData.email);
+    console.log(userData.username);
     db.query(
-      "select id, email, auth_token from users where email = ? and password = ?",
-      [userData.email, userData.password],
+      "select id, username, auth_token from users where username = ? and password = ?",
+      [userData.username, userData.password],
       (error, result) => {
         if (!error) {
           console.log(result);
