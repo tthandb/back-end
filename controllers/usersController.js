@@ -1,5 +1,7 @@
-let users = require("../models/users.js");
-let apiAuth = require("../models/authentication.js");
+let users = require('../models/users.js');
+let tasks = require('../models/tasks.js');
+let Auth = require('../models/authentication.js');
+
 module.exports = (response) => {
   return {
     home: () => {
@@ -7,7 +9,7 @@ module.exports = (response) => {
         JSON.stringify({
           status: 200,
           success: true,
-          message: "Homepage",
+          message: 'Homepage',
         })
       );
     },
@@ -18,14 +20,14 @@ module.exports = (response) => {
         postData.password != undefined &&
         postData.password != null
       ) {
-        apiAuth.apiAuthentication(apiKey, function (err, result) {
+        Auth.apiAuthentication(apiKey, function (err, result) {
           if (err) {
             response.end(
               JSON.stringify({
                 id: 1,
                 status: 500,
                 success: false,
-                message: "Internal server error",
+                message: 'Internal server error',
               })
             );
           } else {
@@ -34,7 +36,7 @@ module.exports = (response) => {
                 JSON.stringify({
                   status: 401,
                   success: false,
-                  message: "Not authorized",
+                  message: 'Not authorized',
                 })
               );
             } else {
@@ -44,7 +46,7 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: "username id already exists",
+                      message: 'username id already exists',
                     })
                   );
                 } else {
@@ -65,7 +67,7 @@ module.exports = (response) => {
           JSON.stringify({
             status: 202,
             success: false,
-            message: "Invalid parameters",
+            message: 'Invalid parameters',
           })
         );
       }
@@ -79,14 +81,14 @@ module.exports = (response) => {
         null ||
         userData.password == undefined
       ) {
-        apiAuth.apiAuthentication(apiKey, (err, result) => {
+        Auth.apiAuthentication(apiKey, (err, result) => {
           if (err)
             response.end(
               JSON.stringify({
                 id: 2,
                 status: 500,
                 success: false,
-                message: "Internal server error",
+                message: 'Internal server error',
               })
             );
           else {
@@ -95,7 +97,7 @@ module.exports = (response) => {
                 JSON.stringify({
                   status: 401,
                   success: false,
-                  message: "Not authorized",
+                  message: 'Not authorized',
                 })
               );
             } else {
@@ -105,7 +107,7 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 203,
                       success: false,
-                      message: "Invalid server error",
+                      message: 'Invalid server error',
                     })
                   );
                 } else {
@@ -126,10 +128,117 @@ module.exports = (response) => {
           JSON.stringify({
             status: 500,
             success: false,
-            message: "Internal server error",
+            message: 'Internal server error',
           })
         );
       }
+    },
+    getUserInfo: (headers, userId) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+              err,
+            })
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              })
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                    err,
+                  })
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    })
+                  );
+                } else {
+                  let dataInfo = '';
+                  users.getUserInfo(userId, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                          err,
+                        })
+                      );
+                    } else {
+                      if (result === false) {
+                        response.end(
+                          JSON.stringify({
+                            status: 201,
+                            success: false,
+                            message: 'No such project exists for user',
+                          })
+                        );
+                      } else {
+                        dataInfo.info = result;
+                        dataInfo.count = tasks.countTask(
+                          null,
+                          0,
+                          (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: 'Internal server error',
+                                  err,
+                                })
+                              );
+                            } else {
+                              console.log(result);
+                              // dataInfo.count = result;
+                              return result;
+                              // response.end(
+                              //   JSON.stringify({
+                              //     status: 200,
+                              //     success: true,
+                              //     data: result,
+                              //   })
+                              // );
+                            }
+                          }
+                        );
+                        response.end(
+                          JSON.stringify({
+                            status: 200,
+                            success: true,
+                            data: dataInfo,
+                          })
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
     },
   };
 };

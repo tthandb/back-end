@@ -68,7 +68,17 @@ http
           );
         }
         break;
-
+      case '/user':
+        if (request.method == 'GET') {
+          const params = urlParts.query;
+          const userId = params.toString().split('=')[1];
+          userController.getUserInfo(request.headers, parseInt(userId));
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
       case '/tasks/create':
         if (request.method == 'POST') {
           let taskData = '';

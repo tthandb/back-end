@@ -59,26 +59,12 @@ module.exports = {
       } else callback(error);
     });
   },
-  searchproduct: (search_query, offset, callback) => {
-    db.query(
-      'select product_name, product_desc,product_url,product_price,date_added from products where product_name like ' +
-        db.escape('%' + search_query + '%') +
-        'limit 1 offset ' +
-        offset,
-      function (error, result) {
-        if (!error) {
-          callback(0, result);
-        } else console.log(error);
-      }
-    );
-  },
   updateTask: (task, callback) => {
     module.exports.taskAuth(task.task_id, (err, result) => {
       if (err) {
         callback(error);
       } else {
         if (result === true) {
-          console.log(task);
           db.query(
             'update tasks set ? where task_id = ?',
             [
@@ -114,11 +100,25 @@ module.exports = {
       if (task.project_id !== undefined)
         sql += ` and project_id = ${task.project_id}`;
       if (task.user_id !== undefined) sql += ` and user_id = ${task.user_id}`;
-      if (task.status_id !== undefined) sql += ` and status_id = ${task.status_id}`;
+      if (task.status_id !== undefined)
+        sql += ` and status_id = ${task.status_id}`;
     }
     db.query(sql, (error, result) => {
       if (!error) {
         callback(0, result);
+      } else callback(error);
+    });
+  },
+  countTask: (project_id, status_id, callback) => {
+    let sql = 'select count(*) as task_count from tasks where ';
+    if (project_id !== null) {
+      sql += `project_id = ${project_id} `;
+      if (status_id !== null) sql += `and status_id = ${status_id}`;
+    } else if (status_id !== null) sql += `status_id = ${status_id}`;
+    db.query(sql, (error, result) => {
+      if (!error) {
+        return callback(0, result);
+
       } else callback(error);
     });
   },
