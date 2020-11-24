@@ -44,7 +44,7 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: "Email id already exists",
+                      message: "username id already exists",
                     })
                   );
                 } else {

@@ -1,34 +1,36 @@
-const http = require("http");
-const url = require("url");
-const users = require("./controllers/usersController.js");
-const tasks = require("./controllers/tasksController");
-const PORT = 2000;
+const http = require('http');
+const url = require('url');
+const users = require('./controllers/usersController.js');
+const tasks = require('./controllers/tasksController.js');
+const projects = require('./controllers/projectsController.js');
+const PORT = 2001;
 const server = http
   .createServer((request, response) => {
     let urlParts = url.parse(request.url);
     let updatedPathName = urlParts.pathname;
-    let userController = users(response);
-    let taskController = tasks(response);
+    const userController = users(response);
+    const taskController = tasks(response);
+    const projectController = projects(response);
     switch (updatedPathName) {
-      case "/":
-        if (request.method == "GET") {
+      case '/':
+        if (request.method == 'GET') {
           userController.home();
         } else {
           response.end(
             JSON.stringify({
               status: 405,
-              message: "Method not allowed",
+              message: 'Method not allowed',
             })
           );
         }
         break;
-      case "/users/signup":
-        if (request.method == "POST") {
-          let postData = "";
-          request.on("data", function (data) {
+      case '/users/signup':
+        if (request.method == 'POST') {
+          let postData = '';
+          request.on('data', function (data) {
             postData += data;
           });
-          request.on("end", function () {
+          request.on('end', function () {
             userController.signUp(
               JSON.parse(postData),
               request.headers.api_key
@@ -38,18 +40,18 @@ const server = http
           response.end(
             JSON.stringify({
               status: 405,
-              message: "Method not allowed",
+              message: 'Method not allowed',
             })
           );
         }
         break;
-      case "/users/login":
-        if (request.method == "POST") {
-          let userData = "";
-          request.on("data", (data) => {
+      case '/users/login':
+        if (request.method == 'POST') {
+          let userData = '';
+          request.on('data', (data) => {
             userData += data;
           });
-          request.on("end", () => {
+          request.on('end', () => {
             userController.signIn(
               JSON.parse(userData),
               request.headers.api_key
@@ -59,23 +61,80 @@ const server = http
           response.end(
             JSON.stringify({
               status: 405,
-              message: "Method not allowed",
+              message: 'Method not allowed',
             })
           );
         }
         break;
-      case "/tasks/create":
-        if (request.method == "POST") {
-          let taskData = "";
-          request.on("data", (data) => {
+
+      case '/tasks/create':
+        if (request.method == 'POST') {
+          let taskData = '';
+          request.on('data', (data) => {
             taskData += data;
           });
-          request.on("end", () => {
+          request.on('end', () => {
             taskController.create_task(JSON.parse(taskData), request.headers);
           });
         } else {
           response.end(
-            JSON.stringify({ status: 405, message: "Method not allowed" })
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+      case '/tasks/delete':
+        if (request.method == 'DELETE') {
+          let id = urlParts.query.toString().split('=');
+          let task_id = id[1];
+          taskController.delete_task(request.headers, parseInt(task_id));
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+      case '/tasks/update':
+        if (request.method == 'POST') {
+          let taskData = '';
+          request.on('data', (data) => {
+            taskData += data;
+          });
+          request.on('end', () => {
+            taskController.update_task(JSON.parse(taskData), request.headers);
+          });
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+      case '/task':
+        if (request.method == 'GET') {
+          let id = urlParts.query.toString().split('=');
+          let task_id = id[1];
+          taskController.view_task(request.headers, parseInt(task_id));
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+
+      case '/projects/create':
+        if (request.method == 'POST') {
+          let projectData = '';
+          request.on('data', (data) => {
+            projectData += data;
+          });
+          request.on('end', () => {
+            projectController.create_project(
+              JSON.parse(projectData),
+              request.headers
+            );
+          });
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
           );
         }
         break;

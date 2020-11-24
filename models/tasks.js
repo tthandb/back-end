@@ -1,60 +1,50 @@
-"use strict";
-let db = require("../config/database.js");
+'use strict';
+let db = require('../config/database.js');
 
 module.exports = {
   createTask: (task, callback) => {
     console.log(task);
-    db.query("insert into tasks set ?", task, function (error, result) {
+    db.query('insert into tasks set ?', task, (error, result) => {
       if (!error) {
         let data = {
           task_id: result.insertId,
           task_title: task.task_title,
+          project_id: task.project_id,
           user_id: task.user_id,
         };
         callback(0, data);
       } else callback(error);
     });
   },
-  deleteproduct: function (user_id, product_id, callback) {
-    //check for valid user of this task
-    module.exports.product_auth(user_id, product_id, function (err, result) {
-      if (err) {
-        callback(error);
-      } else {
-        //if valid delete from database
-        if (result === true) {
-          db.query(
-            "delete from products where id = ?",
-            [product_id],
-            function (error, result) {
-              if (!error) {
-                //callback
-                callback(0, true);
-              } else callback(error);
-            }
-          );
-        } else {
-          callback(0, false);
-        }
-      }
+  deleteTask: (user_id, task_id, callback) => {
+    module.exports.task_auth(user_id, task_id, (err, result) => {
+      if (err) callback(err);
+      else if (result === true) {
+        db.query(
+          'delete from tasks where task_id = ?',
+          [task_id],
+          (error, result) => {
+            if (!error) callback(0, true);
+            else callback(error);
+          }
+        );
+      } else callback(0, false);
     });
   },
-  delistproduct: function (user_id, product_id, callback) {
-    //check if task exists or not call self module function using module.exports
-    module.exports.check_product_exists(product_id, function (err, result) {
+  viewTask: (task_id, callback) => {
+    module.exports.checkTaskExist(task_id, (err, result) => {
       if (err) {
         callback(err);
       } else {
-        //if yes then set disable by setting active field false
         if (result === true) {
           db.query(
-            "update products set ? where id = ?",
-            [{ active: 0 }, product_id],
-            function (error, result) {
+            'select * from tasks where task_id = ?',
+            [task_id],
+            (error, result) => {
               if (!error) {
-                callback(0, true);
-              } else console.log(error);
-              callback(error);
+                callback(0, result);
+              } else
+                callback(error);
             }
           );
         } else {
@@ -63,16 +53,36 @@ module.exports = {
       }
     });
   },
-  viewsingleproduct: function (product_id, callback) {
-    module.exports.check_product_exists(product_id, function (err, result) {
+  searchproduct: function (search_query, offset, callback) {
+    db.query(
+      'select product_name, product_desc,product_url,product_price,date_added from products where product_name like ' +
+        db.escape('%' + search_query + '%') +
+        'limit 1 offset ' +
+        offset,
+      function (error, result) {
+        if (!error) {
+          callback(0, result);
+        } else console.log(error);
+      }
+    );
+  },
+  updateTask: (task, callback) => {
+    module.exports.task_auth(task.user_id, task.task_id, (err, result) => {
       if (err) {
         callback(error);
       } else {
         if (result === true) {
           db.query(
-            "select * from products where id = ? and active = 1",
-            [product_id],
-            function (error, result) {
+            'update tasks set ? where task_id = ?',
+            [
+              {
+                task_title: task.task_title,
+                project_id: task.project_id,
+                user_id: task.user_id,
+              },
+              task.task_id,
+            ],
+            (error, result) => {
               if (!error) {
                 callback(0, result);
               } else callback(error);
@@ -84,58 +94,13 @@ module.exports = {
       }
     });
   },
-  searchproduct: function (search_query, offset, callback) {
+  task_auth: function (user_id, task_id, callback) {
     db.query(
-      "select product_name, product_desc,product_url,product_price,date_added from products where product_name like " +
-        db.escape("%" + search_query + "%") +
-        "limit 1 offset " +
-        offset,
-      function (error, result) {
+      'select count(*) as task_count from tasks where task_id = ? and user_id = ?',
+      [task_id, user_id],
+      (error, rows) => {
         if (!error) {
-          callback(0, result);
-        } else console.log(error);
-      }
-    );
-  },
-  updateproduct: function (task, callback) {
-    module.exports.product_auth(
-      task.user_id,
-      task.product_id,
-      function (err, result) {
-        if (err) {
-          callback(error);
-        } else {
-          if (result === true) {
-            db.query(
-              "update products set ? where id = ?",
-              [
-                {
-                  product_name: task.product_name,
-                  product_desc: task.product_desc,
-                  product_price: task.product_price,
-                },
-                task.product_id,
-              ],
-              function (error, result) {
-                if (!error) {
-                  callback(0, result);
-                } else callback(error);
-              }
-            );
-          } else {
-            callback(0, false);
-          }
-        }
-      }
-    );
-  },
-  product_auth: function (user_id, product_id, callback) {
-    db.query(
-      "select count(*) as productcount from products where id = ? and user_id = ? and active = 1",
-      [product_id, user_id],
-      function (error, rows) {
-        if (!error) {
-          if (rows[0].productcount) {
+          if (rows[0].task_count) {
             callback(0, true);
           } else {
             callback(0, false);
@@ -144,13 +109,13 @@ module.exports = {
       }
     );
   },
-  check_product_exists: function (product_id, callback) {
+  checkTaskExist: function (task_id, callback) {
     db.query(
-      "select count(*) as productcount from products where id = ? and  active = 1 ",
-      [product_id],
-      function (error, rows) {
+      'select count(*) as task_count from tasks where task_id = ?',
+      [task_id],
+      (error, rows) => {
         if (!error) {
-          if (rows[0].productcount) {
+          if (rows[0].task_count) {
             callback(0, true);
           } else {
             callback(0, false);
