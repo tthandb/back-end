@@ -233,6 +233,71 @@ module.exports = (response) => {
         }
       });
     },
+    handleViewAllTasks: (headers) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+            })
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              })
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                  })
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    })
+                  );
+                } else {
+                  tasks.viewAllTasks((err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                        })
+                      );
+                    } else {
+                      response.end(
+                        JSON.stringify({
+                          status: 200,
+                          success: true,
+                          data: result,
+                        })
+                      );
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
+    },
     handleSearchTask: function (headers, search_query, offset) {
       //check for valid api authentication
       Auth.apiAuthentication(headers.api_key, function (err, result) {
@@ -332,6 +397,7 @@ module.exports = (response) => {
                     status: 500,
                     success: false,
                     message: 'Internal server error',
+                    err,
                   })
                 );
               } else {
@@ -345,13 +411,14 @@ module.exports = (response) => {
                   );
                 } else {
                   postData.user_id = headers.user_id;
-                  tasks.updateTask(postData, function (err, result) {
+                  tasks.updateTask(postData, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({
                           status: 500,
                           success: false,
                           message: 'Internal server error',
+                          err,
                         })
                       );
                     } else {

@@ -118,9 +118,11 @@ http
         break;
       case '/task':
         if (request.method == 'GET') {
-          let id = urlParts.query.toString().split('=');
-          let taskId = id[1];
-          taskController.handleViewTask(request.headers, parseInt(taskId));
+          const params = urlParts.query;
+          if (params !== null) {
+            const taskId = params.toString().split('=')[1];
+            taskController.handleViewTask(request.headers, parseInt(taskId));
+          } else taskController.handleViewAllTasks(request.headers);
         } else {
           response.end(
             JSON.stringify({ status: 405, message: 'Method not allowed' })
@@ -150,7 +152,10 @@ http
         if (request.method == 'DELETE') {
           let id = urlParts.query.toString().split('=');
           let projectId = id[1];
-          projectController.handleDeleteProject(request.headers, parseInt(projectId));
+          projectController.handleDeleteProject(
+            request.headers,
+            parseInt(projectId)
+          );
         } else {
           response.end(
             JSON.stringify({ status: 405, message: 'Method not allowed' })
@@ -169,6 +174,22 @@ http
               request.headers
             );
           });
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+      case '/project':
+        if (request.method == 'GET') {
+          const params = urlParts.query;
+          if (params !== null) {
+            const projectId = params.toString().split('=')[1];
+            projectController.handleViewProject(
+              request.headers,
+              parseInt(projectId)
+            );
+          } else projectController.handleViewAllProjects(request.headers);
         } else {
           response.end(
             JSON.stringify({ status: 405, message: 'Method not allowed' })

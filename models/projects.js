@@ -14,13 +14,13 @@ module.exports = {
       } else callback(error);
     });
   },
-  deleteProject: (project_id, callback) => {
-    module.exports.projectAuth(project_id, (err, result) => {
+  deleteProject: (projectId, callback) => {
+    module.exports.projectAuth(projectId, (err, result) => {
       if (err) callback(err);
       else if (result === true) {
         db.query(
           'delete from projects where project_id = ?',
-          [project_id],
+          [projectId],
           (error) => {
             if (!error) callback(0, true);
             else callback(error);
@@ -29,15 +29,15 @@ module.exports = {
       } else callback(0, false);
     });
   },
-  viewProject: (project_id, callback) => {
-    module.exports.checkProjectExist(project_id, (err, result) => {
+  viewProject: (projectId, callback) => {
+    module.exports.checkProjectExist(projectId, (err, result) => {
       if (err) {
         callback(err);
       } else {
         if (result === true) {
           db.query(
             'select * from projects where project_id = ?',
-            [project_id],
+            [projectId],
             (error, result) => {
               if (!error) {
                 callback(0, result);
@@ -48,6 +48,13 @@ module.exports = {
           callback(0, false);
         }
       }
+    });
+  },
+  viewAllProjects: (callback) => {
+    db.query('select * from projects', (error, result) => {
+      if (!error) {
+        callback(0, result);
+      } else callback(error);
     });
   },
   searchproduct: function (search_query, offset, callback) {
@@ -104,7 +111,7 @@ module.exports = {
       }
     );
   },
-  checkProjectExist: function (project_id, callback) {
+  checkProjectExist: (project_id, callback) => {
     db.query(
       'select count(*) as project_count from projects where project_id = ?',
       [project_id],
