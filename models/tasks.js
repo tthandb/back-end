@@ -17,7 +17,7 @@ module.exports = {
     });
   },
   deleteTask: (user_id, task_id, callback) => {
-    module.exports.task_auth(user_id, task_id, (err, result) => {
+    module.exports.taskAuth(user_id, task_id, (err, result) => {
       if (err) callback(err);
       else if (result === true) {
         db.query(
@@ -67,7 +67,7 @@ module.exports = {
     );
   },
   updateTask: (task, callback) => {
-    module.exports.task_auth(task.user_id, task.task_id, (err, result) => {
+    module.exports.taskAuth(task.user_id, task.task_id, (err, result) => {
       if (err) {
         callback(error);
       } else {
@@ -94,7 +94,7 @@ module.exports = {
       }
     });
   },
-  task_auth: function (user_id, task_id, callback) {
+  taskAuth: function (user_id, task_id, callback) {
     db.query(
       'select count(*) as task_count from tasks where task_id = ? and user_id = ?',
       [task_id, user_id],

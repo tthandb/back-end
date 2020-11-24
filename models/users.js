@@ -2,7 +2,7 @@ const db = require("../config/database.js");
 
 module.exports = {
   signUp: (userData, callback) => {
-    let auth_token = module.exports.generate_auth_token();
+    let auth_token = module.exports.generateAuthToken();
     userData.auth_token = auth_token;
     db.query("INSERT INTO users SET ?", userData, function (error, result) {
       if (!error) {
@@ -15,7 +15,7 @@ module.exports = {
       } else callback(error);
     });
   },
-  generate_auth_token: () => {
+  generateAuthToken: () => {
     let chars =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$&";
     let result = "";

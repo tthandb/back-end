@@ -4,8 +4,8 @@ let Auth = require('../models/authentication.js');
 
 module.exports = (response) => {
   return {
-    create_project: (postData, headers) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleCreateProject: (postData, headers) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -24,17 +24,17 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error1',
+                    message: 'Internal server error',
                   })
                 );
               } else {
-                if (result === false) {
+                if (result === false)
                   response.end(
                     JSON.stringify({
                       status: 401,
@@ -42,17 +42,17 @@ module.exports = (response) => {
                       message: 'user not authorized',
                     })
                   );
-                } else {
-                  projects.createTask(postData, (err, result) => {
-                    if (err) {
+                else
+                  projects.createProject(postData, (err, result) => {
+                    if (err)
                       response.end(
                         JSON.stringify({
                           status: 500,
                           success: false,
-                          message: 'Internal server error2',
+                          message: 'Internal server error',
                         })
                       );
-                    } else {
+                    else
                       response.end(
                         JSON.stringify({
                           status: 200,
@@ -60,17 +60,15 @@ module.exports = (response) => {
                           data: result,
                         })
                       );
-                    }
                   });
-                }
               }
             });
           }
         }
       });
     },
-    delete_project: (headers, project_id) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleDeleteTask: (headers, task_id) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -89,7 +87,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, function (err, result) {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -110,7 +108,7 @@ module.exports = (response) => {
                 } else {
                   projects.deleteTask(
                     headers.user_id,
-                    project_id,
+                    task_id,
                     (err, result) => {
                       if (err) {
                         response.end(
@@ -118,7 +116,6 @@ module.exports = (response) => {
                             status: 500,
                             success: false,
                             message: 'Internal server error',
-                            err,
                           })
                         );
                       } else {
@@ -127,7 +124,7 @@ module.exports = (response) => {
                             JSON.stringify({
                               status: 200,
                               success: true,
-                              message: 'project deleted successfully',
+                              message: 'task deleted successfully',
                             })
                           );
                         } else {
@@ -135,7 +132,7 @@ module.exports = (response) => {
                             JSON.stringify({
                               status: 201,
                               success: false,
-                              message: 'No such project exists',
+                              message: 'No such task exists',
                             })
                           );
                         }
@@ -149,8 +146,8 @@ module.exports = (response) => {
         }
       });
     },
-    view_project: (headers, project_id) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleViewTask: (headers, task_id) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -169,7 +166,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -188,7 +185,7 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  projects.viewTask(project_id, (err, result) => {
+                  projects.viewTask(task_id, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({
@@ -203,13 +200,13 @@ module.exports = (response) => {
                           JSON.stringify({
                             status: 201,
                             success: false,
-                            message: 'No such project exists for user',
+                            message: 'No such task exists for user',
                           })
                         );
                       } else {
                         let data = {
-                          project_id: result[0].project_id,
-                          project_title: result[0].project_title,
+                          task_id: result[0].task_id,
+                          task_title: result[0].task_title,
                           project_id: result[0].project_id,
                           user_id: result[0].user_id,
                           create_at: result[0].create_at,
@@ -231,9 +228,9 @@ module.exports = (response) => {
         }
       });
     },
-    search_project: function (headers, search_query, offset) {
+    handleSearchTask: (headers, search_query, offset) => {
       //check for valid api authentication
-      Auth.api_authentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, function (err, result) {
         if (err) {
           response.end(
             JSON.stringify({
@@ -252,7 +249,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, function (err, result) {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -271,8 +268,8 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  //search all project having same query string
-                  projects.searchproject(
+                  //search all task having same query string
+                  projects.searchtask(
                     search_query,
                     offset,
                     function (err, result) {
@@ -285,7 +282,7 @@ module.exports = (response) => {
                           })
                         );
                       } else {
-                        //let project = [];
+                        //let task = [];
                         response.end(
                           JSON.stringify({
                             status: 200,
@@ -303,8 +300,8 @@ module.exports = (response) => {
         }
       });
     },
-    update_project: (postData, headers) => {
-      Auth.api_authentication(headers.api_key, function (err, result) {
+    handleUpdateProject: (postData, headers) => {
+      Auth.apiAuthentication(headers.api_key, function (err, result) {
         if (err) {
           response.end(
             JSON.stringify({
@@ -323,7 +320,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -342,8 +339,7 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  postData.user_id = headers.user_id;
-                  projects.updateTask(postData, function (err, result) {
+                  projects.updateProject(postData, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({
@@ -358,21 +354,94 @@ module.exports = (response) => {
                           JSON.stringify({
                             status: 201,
                             success: false,
-                            message: 'No Such project exists for user',
+                            message: 'No such task exists for user',
                           })
                         );
                       } else {
                         const data = {
                           project_id: postData.project_id,
-                          project_title: postData.project_title,
-                          project_id: postData.project_id,
-                          user_id: postData.user_id,
+                          project_name: postData.project_name,
                         };
                         response.end(
                           JSON.stringify({
                             status: 200,
                             success: true,
                             data: data,
+                          })
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
+    },
+    handleDeleteProject: (headers, projectId) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+            })
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              })
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                  })
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    })
+                  );
+                } else {
+                  projects.deleteProject(projectId, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 409,
+                          success: false,
+                          message: 'Project is not empty',
+                        })
+                      );
+                    } else {
+                      if (result === true) {
+                        response.end(
+                          JSON.stringify({
+                            status: 200,
+                            success: true,
+                            message: 'Project deleted successfully',
+                          })
+                        );
+                      } else {
+                        response.end(
+                          JSON.stringify({
+                            status: 201,
+                            success: false,
+                            message: 'No such task exists',
                           })
                         );
                       }

@@ -18,7 +18,7 @@ module.exports = (response) => {
         postData.password != undefined &&
         postData.password != null
       ) {
-        apiAuth.api_authentication(apiKey, function (err, result) {
+        apiAuth.apiAuthentication(apiKey, function (err, result) {
           if (err) {
             response.end(
               JSON.stringify({
@@ -79,7 +79,7 @@ module.exports = (response) => {
         null ||
         userData.password == undefined
       ) {
-        apiAuth.api_authentication(apiKey, (err, result) => {
+        apiAuth.apiAuthentication(apiKey, (err, result) => {
           if (err)
             response.end(
               JSON.stringify({

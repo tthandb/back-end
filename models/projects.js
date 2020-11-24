@@ -14,14 +14,14 @@ module.exports = {
       } else callback(error);
     });
   },
-  deleteProject: (user_id, project_id, callback) => {
-    module.exports.project_auth(user_id, project_id, (err, result) => {
+  deleteProject: (project_id, callback) => {
+    module.exports.projectAuth(project_id, (err, result) => {
       if (err) callback(err);
       else if (result === true) {
         db.query(
           'delete from projects where project_id = ?',
           [project_id],
-          (error, result) => {
+          (error) => {
             if (!error) callback(0, true);
             else callback(error);
           }
@@ -41,8 +41,7 @@ module.exports = {
             (error, result) => {
               if (!error) {
                 callback(0, result);
-              } else
-                callback(error);
+              } else callback(error);
             }
           );
         } else {
@@ -65,7 +64,7 @@ module.exports = {
     );
   },
   updateProject: (project, callback) => {
-    module.exports.project_auth(project.user_id, project.project_id, (err, result) => {
+    module.exports.projectAuth(project.project_id, (err, result) => {
       if (err) {
         callback(error);
       } else {
@@ -74,9 +73,7 @@ module.exports = {
             'update projects set ? where project_id = ?',
             [
               {
-                project_title: project.project_title,
-                project_id: project.project_id,
-                user_id: project.user_id,
+                project_name: project.project_name,
               },
               project.project_id,
             ],
@@ -92,10 +89,10 @@ module.exports = {
       }
     });
   },
-  project_auth: function (user_id, project_id, callback) {
+  projectAuth: (project_id, callback) => {
     db.query(
-      'select count(*) as project_count from projects where project_id = ? and user_id = ?',
-      [project_id, user_id],
+      'select count(*) as project_count from projects where project_id = ?',
+      [project_id],
       (error, rows) => {
         if (!error) {
           if (rows[0].project_count) {

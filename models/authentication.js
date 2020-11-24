@@ -1,7 +1,7 @@
 const db = require("../config/database.js");
 
 module.exports = {
-  api_authentication: (apiKey, callback) => {
+  apiAuthentication: (apiKey, callback) => {
     db.query(
       "SELECT * FROM api_auth WHERE api_token = ?",
       apiKey,
@@ -16,7 +16,7 @@ module.exports = {
       }
     );
   },
-  user_authentication: (userData, callback) => {
+  userAuthentication: (userData, callback) => {
     db.query(
       "select count(*) AS userCount from users where id = ? and auth_token = ?",
       [userData.user_id, userData.auth_token],

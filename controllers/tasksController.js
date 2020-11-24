@@ -4,8 +4,8 @@ let Auth = require('../models/authentication.js');
 
 module.exports = (response) => {
   return {
-    create_task: (postData, headers) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleCreateTask: (postData, headers) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -24,7 +24,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -55,7 +55,7 @@ module.exports = (response) => {
                         JSON.stringify({
                           status: 500,
                           success: false,
-                          message: 'Internal server error2',
+                          message: 'Internal server error',
                         })
                       );
                     } else {
@@ -75,8 +75,8 @@ module.exports = (response) => {
         }
       });
     },
-    delete_task: (headers, task_id) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleDeleteTask: (headers, task_id) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -95,7 +95,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, function (err, result) {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -151,8 +151,8 @@ module.exports = (response) => {
         }
       });
     },
-    view_task: (headers, task_id) => {
-      Auth.api_authentication(headers.api_key, (err, result) => {
+    handleViewTask: (headers, task_id) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -171,7 +171,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -233,9 +233,9 @@ module.exports = (response) => {
         }
       });
     },
-    search_task: function (headers, search_query, offset) {
+    handleSearchTask: function (headers, search_query, offset) {
       //check for valid api authentication
-      Auth.api_authentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, function (err, result) {
         if (err) {
           response.end(
             JSON.stringify({
@@ -254,7 +254,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, function (err, result) {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -305,8 +305,8 @@ module.exports = (response) => {
         }
       });
     },
-    update_task: (postData, headers) => {
-      Auth.api_authentication(headers.api_key, function (err, result) {
+    handleUpdateTask: (postData, headers) => {
+      Auth.apiAuthentication(headers.api_key, function (err, result) {
         if (err) {
           response.end(
             JSON.stringify({
@@ -325,7 +325,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.user_authentication(headers, (err, result) => {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
