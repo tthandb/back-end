@@ -350,8 +350,6 @@ module.exports = (response) => {
                         })
                       );
                     } else {
-                      const projects = result;
-                      
                       response.end(
                         JSON.stringify({
                           status: 200,
