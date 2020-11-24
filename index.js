@@ -129,6 +129,24 @@ http
           );
         }
         break;
+      case '/tasks/search':
+        if (request.method == 'POST') {
+          let taskData = '';
+          request.on('data', (data) => {
+            taskData += data;
+          });
+          request.on('end', () => {
+            taskController.handleFilterTask(
+              JSON.parse(taskData),
+              request.headers
+            );
+          });
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
 
       case '/projects/create':
         if (request.method == 'POST') {

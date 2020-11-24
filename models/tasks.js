@@ -62,14 +62,13 @@ module.exports = {
   searchproduct: (search_query, offset, callback) => {
     db.query(
       'select product_name, product_desc,product_url,product_price,date_added from products where product_name like ' +
-      db.escape('%' + search_query + '%') +
-      'limit 1 offset ' +
-      offset,
+        db.escape('%' + search_query + '%') +
+        'limit 1 offset ' +
+        offset,
       function (error, result) {
         if (!error) {
           callback(0, result);
-        } else
-          console.log(error);
+        } else console.log(error);
       }
     );
   },
@@ -101,6 +100,26 @@ module.exports = {
           callback(0, false);
         }
       }
+    });
+  },
+  filterTask: (task, callback) => {
+    let sql = 'select * from tasks';
+    if (task.keyword === undefined) task.keyword = '';
+    sql += ` where task_title like '%${task.keyword}%'`;
+    if (
+      task.project_id !== undefined ||
+      task.user_id !== undefined ||
+      task.status_id !== undefined
+    ) {
+      if (task.project_id !== undefined)
+        sql += ` and project_id = ${task.project_id}`;
+      if (task.user_id !== undefined) sql += ` and user_id = ${task.user_id}`;
+      if (task.status_id !== undefined) sql += ` and status_id = ${task.status_id}`;
+    }
+    db.query(sql, (error, result) => {
+      if (!error) {
+        callback(0, result);
+      } else callback(error);
     });
   },
   taskAuth: function (task_id, callback) {

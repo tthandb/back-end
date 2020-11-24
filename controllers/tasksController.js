@@ -410,7 +410,6 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  postData.user_id = headers.user_id;
                   tasks.updateTask(postData, (err, result) => {
                     if (err) {
                       response.end(
@@ -442,6 +441,83 @@ module.exports = (response) => {
                             status: 200,
                             success: true,
                             data: data,
+                          })
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
+    },
+    handleFilterTask: (postData, headers) => {
+      Auth.apiAuthentication(headers.api_key, function (err, result) {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+            })
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              })
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                    err,
+                  })
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    })
+                  );
+                } else {
+                  tasks.filterTask(postData, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                          err,
+                        })
+                      );
+                    } else {
+                      if (result === false) {
+                        response.end(
+                          JSON.stringify({
+                            status: 201,
+                            success: false,
+                            message: 'No Such task exists for user',
+                          })
+                        );
+                      } else {
+                        response.end(
+                          JSON.stringify({
+                            status: 200,
+                            success: true,
+                            data: result,
                           })
                         );
                       }
