@@ -30,7 +30,7 @@ module.exports = {
       } else callback(error);
     });
   },
-  checkStatusExist: function (status_id, callback) {
+  checkStatusExist: (status_id, callback) => {
     db.query(
       'select count(*) as status_count from statuses where id = ?',
       [status_id],

@@ -57,19 +57,6 @@ module.exports = {
       } else callback(error);
     });
   },
-  searchproduct: function (search_query, offset, callback) {
-    db.query(
-      'select product_name, product_desc,product_url,product_price,date_added from products where product_name like ' +
-        db.escape('%' + search_query + '%') +
-        'limit 1 offset ' +
-        offset,
-      function (error, result) {
-        if (!error) {
-          callback(0, result);
-        } else console.log(error);
-      }
-    );
-  },
   updateProject: (project, callback) => {
     module.exports.projectAuth(project.project_id, (err, result) => {
       if (err) {

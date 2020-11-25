@@ -2,9 +2,9 @@ const db = require('../config/database.js');
 
 module.exports = {
   signUp: (userData, callback) => {
-    let auth_token = module.exports.generateAuthToken();
-    userData.auth_token = auth_token;
-    db.query('INSERT INTO users SET ?', userData, function (error, result) {
+    const authToken = module.exports.generateAuthToken();
+    userData.auth_token = authToken;
+    db.query('INSERT INTO users SET ?', userData, (error, result) => {
       if (!error) {
         let data = {
           user_id: result.insertId,

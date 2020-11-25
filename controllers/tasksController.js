@@ -95,7 +95,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.userAuthentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -298,9 +298,9 @@ module.exports = (response) => {
         }
       });
     },
-    handleSearchTask: function (headers, search_query, offset) {
+    handleSearchTask: (headers, search_query, offset) => {
       //check for valid api authentication
-      Auth.apiAuthentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -319,7 +319,7 @@ module.exports = (response) => {
               })
             );
           } else {
-            Auth.userAuthentication(headers, function (err, result) {
+            Auth.userAuthentication(headers, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -339,30 +339,26 @@ module.exports = (response) => {
                   );
                 } else {
                   //search all task having same query string
-                  tasks.searchtask(
-                    search_query,
-                    offset,
-                    function (err, result) {
-                      if (err) {
-                        response.end(
-                          JSON.stringify({
-                            status: 500,
-                            success: false,
-                            message: 'Internal server error',
-                          })
-                        );
-                      } else {
-                        //let task = [];
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data: result,
-                          })
-                        );
-                      }
+                  tasks.searchtask(search_query, offset, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                        })
+                      );
+                    } else {
+                      //let task = [];
+                      response.end(
+                        JSON.stringify({
+                          status: 200,
+                          success: true,
+                          data: result,
+                        })
+                      );
                     }
-                  );
+                  });
                 }
               }
             });
@@ -371,7 +367,7 @@ module.exports = (response) => {
       });
     },
     handleUpdateTask: (postData, headers) => {
-      Auth.apiAuthentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({
@@ -454,7 +450,7 @@ module.exports = (response) => {
       });
     },
     handleFilterTask: (postData, headers) => {
-      Auth.apiAuthentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({

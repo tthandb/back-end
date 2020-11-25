@@ -31,15 +31,15 @@ http
       case '/users/signup':
         if (request.method == 'POST') {
           let postData = '';
-          request.on('data', function (data) {
-            postData += data;
-          });
-          request.on('end', function () {
-            userController.signUp(
-              JSON.parse(postData),
-              request.headers.api_key
-            );
-          });
+          request.on('data', (data) => {
+              postData += data;
+            });
+          request.on('end', () => {
+              userController.signUp(
+                JSON.parse(postData),
+                request.headers.api_key
+              );
+            });
         } else {
           response.end(
             JSON.stringify({

@@ -15,7 +15,7 @@ const handleDisconnect = () => {
       setTimeout(handleDisconnect, 2000);
     }
   });
-  connection.on('error', function (err) {
+  connection.on('error', (err) => {
     console.log('db error', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       handleDisconnect();

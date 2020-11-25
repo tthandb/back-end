@@ -68,7 +68,7 @@ module.exports = (response) => {
       });
     },
     handleUpdateProject: (postData, headers) => {
-      Auth.apiAuthentication(headers.api_key, function (err, result) {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
             JSON.stringify({

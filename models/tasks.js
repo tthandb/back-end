@@ -123,7 +123,7 @@ module.exports = {
       } else callback(error);
     });
   },
-  taskAuth: function (task_id, callback) {
+  taskAuth: (task_id, callback) => {
     db.query(
       'select count(*) as task_count from tasks where task_id = ?',
       [task_id],
@@ -138,7 +138,7 @@ module.exports = {
       }
     );
   },
-  checkTaskExist: function (task_id, callback) {
+  checkTaskExist: (task_id, callback) => {
     db.query(
       'select count(*) as task_count from tasks where task_id = ?',
       [task_id],

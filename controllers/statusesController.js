@@ -4,7 +4,7 @@ let Auth = require('../models/authentication.js');
 
 module.exports = (response) => {
   return {
-    handleViewStatus: (headers, status_id) => {
+    handleViewStatus: (headers, statusId) => {
       Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
@@ -43,7 +43,7 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  statuses.viewStatus(status_id, (err, result) => {
+                  statuses.viewStatus(statusId, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({
