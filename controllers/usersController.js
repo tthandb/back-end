@@ -133,7 +133,7 @@ module.exports = (response) => {
         );
       }
     },
-    getUserInfo: (headers, userId) => {
+    getUserInfo: (headers, userParams) => {
       Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
@@ -173,9 +173,17 @@ module.exports = (response) => {
                       message: 'user not authorized',
                     })
                   );
+                } else if (userParams.user_id === undefined) {
+                  response.end(
+                    JSON.stringify({
+                      status: 201,
+                      success: false,
+                      message: 'User_id not found',
+                    })
+                  );
                 } else {
                   let userInfo = {};
-                  users.getUserInfo(userId, (err, result) => {
+                  users.getUserInfo(userParams.user_id, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({
@@ -195,26 +203,31 @@ module.exports = (response) => {
                           })
                         );
                       } else {
-                        userInfo ={...userInfo,...result[0]}
-                        tasks.countTask(null, userId, (err, result) => {
-                          if (err) {
-                            response.end(
-                              JSON.stringify({
-                                status: 500,
-                                success: false,
-                                message: err,
-                              })
-                            );
-                          } else {
-                            userInfo ={...userInfo,...result[0]}
+                        userInfo = { ...userInfo, ...result[0] };
+                        tasks.countTask(
+                          userParams.user_id,
+                          userParams.project_id,
+                          userParams.status_id,
+                          (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: err,
+                                })
+                              );
+                            } else {
+                              userInfo = { ...userInfo, ...result[0] };
+                              response.end(
+                                JSON.stringify({
+                                  status: 200,
+                                  success: true,
+                                  data: userInfo,
+                                })
+                              );
+                            }
                           }
-                        });
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data: userInfo,
-                          })
                         );
                       }
                     }

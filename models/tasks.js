@@ -110,17 +110,13 @@ module.exports = {
     });
   },
   countTask: (user_id, project_id, status_id, callback) => {
-    let sql = 'select count(*) as task_count from tasks where ';
-    if (user_id !== null) {
-      sql += `user_id = ${user_id} `;
-      if (project_id !== null) {
-        sql += `and project_id = ${project_id} `;
-        if (status_id !== null) sql += `and status_id = ${status_id}`;
-      } else if (status_id !== null) sql += `and status_id = ${status_id}`;
-    } else if (project_id !== null) {
-      sql += `project_id = ${project_id} `;
-      if (status_id !== null) sql += `and status_id = ${status_id}`;
-    } else if (status_id !== null) sql += `status_id = ${status_id}`;
+    let sql = 'select count(*) as tasks from tasks where ';
+    if (user_id === undefined) sql += '(user_id = 1 or 1=1) ';
+    else sql += `user_id = ${user_id} `;
+    if (project_id === undefined) sql += 'and (project_id = 1 or 1=1) ';
+    else sql += `and project_id = ${project_id} `;
+    if (status_id === undefined) sql += 'and (status_id = 1 or 1=1) ';
+    else sql += `and status_id = ${status_id} `;
     db.query(sql, (error, result) => {
       if (!error) {
         callback(0, result);

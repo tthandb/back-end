@@ -4,6 +4,7 @@ const env = require('./config/env');
 const users = require('./controllers/usersController.js');
 const tasks = require('./controllers/tasksController.js');
 const projects = require('./controllers/projectsController.js');
+const statuses = require('./controllers/statusesController.js');
 
 console.log(`Server listen on ${env.PORT || 2000}`);
 http
@@ -13,6 +14,7 @@ http
     const userController = users(response);
     const taskController = tasks(response);
     const projectController = projects(response);
+    const statusController = statuses(response);
     switch (updatedPathName) {
       case '/':
         if (request.method == 'GET') {
@@ -68,11 +70,15 @@ http
           );
         }
         break;
-      case '/user':
-        if (request.method == 'GET') {
-          const params = urlParts.query;
-          const userId = params.toString().split('=')[1];
-          userController.getUserInfo(request.headers, parseInt(userId));
+      case '/tasks/count':
+        if (request.method == 'POST') {
+          let params = '';
+          request.on('data', (data) => {
+            params += data;
+          });
+          request.on('end', () => {
+            userController.getUserInfo(request.headers, JSON.parse(params));
+          });
         } else {
           response.end(
             JSON.stringify({ status: 405, message: 'Method not allowed' })
@@ -218,6 +224,20 @@ http
               parseInt(projectId)
             );
           } else projectController.handleViewAllProjects(request.headers);
+        } else {
+          response.end(
+            JSON.stringify({ status: 405, message: 'Method not allowed' })
+          );
+        }
+        break;
+
+      case '/status':
+        if (request.method == 'GET') {
+          const params = urlParts.query;
+          if (params !== null) {
+            const statusId = params.toString().split('=')[1];
+            statusController.handleViewStatus(request.headers, parseInt(statusId));
+          } else statusController.handleViewAllStatuses(request.headers);
         } else {
           response.end(
             JSON.stringify({ status: 405, message: 'Method not allowed' })

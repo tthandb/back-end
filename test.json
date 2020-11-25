@@ -1,8 +1,10 @@
 {
   "status": 200,
   "success": true,
-  "data": {
-    "information": { "username": "binhnd" },
-    "task_count": 3
-  }
+  "data": [
+    { "id": 0, "name": "Unassigned" },
+    { "id": 1, "name": "To Do" },
+    { "id": 2, "name": "Doing" },
+    { "id": 3, "name": "Done" }
+  ]
 }
