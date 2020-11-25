@@ -1,11 +1,11 @@
 const http = require('http');
 const url = require('url');
+const env = require('./config/env');
 const users = require('./controllers/usersController.js');
 const tasks = require('./controllers/tasksController.js');
 const projects = require('./controllers/projectsController.js');
-const PORT = 2000;
 
-console.log(`Server listen on ${PORT}`);
+console.log(`Server listen on ${env.PORT || 2000}`);
 http
   .createServer((request, response) => {
     let urlParts = url.parse(request.url);
@@ -226,4 +226,4 @@ http
         break;
     }
   })
-  .listen(PORT);
+  .listen(env.PORT || 2000);
