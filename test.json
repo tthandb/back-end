@@ -1,22 +1,8 @@
 {
   "status": 200,
   "success": true,
-  "data": [
-    {
-      "task_id": 4,
-      "task_title": "task 4",
-      "project_id": 1,
-      "user_id": 4,
-      "status_id": 0,
-      "create_at": "2020-11-23T18:40:05.000Z"
-    },
-    {
-      "task_id": 13,
-      "task_title": "task 7",
-      "project_id": 1,
-      "user_id": 5,
-      "status_id": 0,
-      "create_at": "2020-11-24T13:46:24.000Z"
-    }
-  ]
+  "data": {
+    "information": { "username": "binhnd" },
+    "task_count": 3
+  }
 }

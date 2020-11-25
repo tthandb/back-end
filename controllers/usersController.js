@@ -174,7 +174,7 @@ module.exports = (response) => {
                     })
                   );
                 } else {
-                  let dataInfo = '';
+                  let userInfo = {};
                   users.getUserInfo(userId, (err, result) => {
                     if (err) {
                       response.end(
@@ -195,39 +195,25 @@ module.exports = (response) => {
                           })
                         );
                       } else {
-                        dataInfo.info = result;
-                        dataInfo.count = tasks.countTask(
-                          null,
-                          0,
-                          (err, result) => {
-                            if (err) {
-                              response.end(
-                                JSON.stringify({
-                                  status: 500,
-                                  success: false,
-                                  message: 'Internal server error',
-                                  err,
-                                })
-                              );
-                            } else {
-                              console.log(result);
-                              // dataInfo.count = result;
-                              return result;
-                              // response.end(
-                              //   JSON.stringify({
-                              //     status: 200,
-                              //     success: true,
-                              //     data: result,
-                              //   })
-                              // );
-                            }
+                        userInfo ={...userInfo,...result[0]}
+                        tasks.countTask(null, userId, (err, result) => {
+                          if (err) {
+                            response.end(
+                              JSON.stringify({
+                                status: 500,
+                                success: false,
+                                message: err,
+                              })
+                            );
+                          } else {
+                            userInfo ={...userInfo,...result[0]}
                           }
-                        );
+                        });
                         response.end(
                           JSON.stringify({
                             status: 200,
                             success: true,
-                            data: dataInfo,
+                            data: userInfo,
                           })
                         );
                       }

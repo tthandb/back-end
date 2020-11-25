@@ -109,16 +109,21 @@ module.exports = {
       } else callback(error);
     });
   },
-  countTask: (project_id, status_id, callback) => {
+  countTask: (user_id, project_id, status_id, callback) => {
     let sql = 'select count(*) as task_count from tasks where ';
-    if (project_id !== null) {
+    if (user_id !== null) {
+      sql += `user_id = ${user_id} `;
+      if (project_id !== null) {
+        sql += `and project_id = ${project_id} `;
+        if (status_id !== null) sql += `and status_id = ${status_id}`;
+      } else if (status_id !== null) sql += `and status_id = ${status_id}`;
+    } else if (project_id !== null) {
       sql += `project_id = ${project_id} `;
       if (status_id !== null) sql += `and status_id = ${status_id}`;
     } else if (status_id !== null) sql += `status_id = ${status_id}`;
     db.query(sql, (error, result) => {
       if (!error) {
-        return callback(0, result);
-
+        callback(0, result);
       } else callback(error);
     });
   },
