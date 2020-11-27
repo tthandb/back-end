@@ -1,50 +1,243 @@
-const db = require('../config/database.js');
+let users = require('../models/users.js');
+let tasks = require('../models/tasks.js');
+let Auth = require('../models/authentication.js');
 
-module.exports = {
-  signUp: (userData, callback) => {
-    const authToken = module.exports.generateAuthToken();
-    userData.auth_token = authToken;
-    db.query('INSERT INTO users SET ?', userData, (error, result) => {
-      if (!error) {
-        let data = {
-          user_id: result.insertId,
-          username: userData.username,
-          auth_token: userData.auth_token,
-        };
-        callback(0, data);
-      } else callback(error);
-    });
-  },
-  generateAuthToken: () => {
-    let chars =
-      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$&';
-    let result = '';
-    for (let i = 32; i > 0; --i)
-      result += chars[Math.floor(Math.random() * chars.length)];
-    return result;
-  },
-  login: (userData, callback) => {
-    console.log(userData.username);
-    db.query(
-      'select id, username, auth_token from users where username = ? and password = ?',
-      [userData.username, userData.password],
-      (error, result) => {
-        if (!error) {
-          console.log(result);
-          if (result.length > 0) callback(0, result);
-        } else callback(error);
+module.exports = (response) => {
+  return {
+    home: () => {
+      response.end(
+        JSON.stringify({
+          status: 200,
+          success: true,
+          message: 'Homepage',
+        })
+      );
+    },
+    signUp: (postData, apiKey) => {
+      if (
+        postData.username !== undefined &&
+        postData.username != null &&
+        postData.password !== undefined &&
+        postData.password != null
+      ) {
+        Auth.apiAuthentication(apiKey, (err, result) => {
+          if (err) {
+            response.end(
+              JSON.stringify({
+                id: 1,
+                status: 500,
+                success: false,
+                message: 'Internal server error',
+              })
+            );
+          } else {
+            if (result === false) {
+              response.end(
+                JSON.stringify({
+                  status: 401,
+                  success: false,
+                  message: 'Not authorized',
+                })
+              );
+            } else {
+              users.signUp(postData, (err, result) => {
+                if (err) {
+                  response.end(
+                    JSON.stringify({
+                      status: 500,
+                      success: false,
+                      message: 'username id already exists',
+                    })
+                  );
+                } else {
+                  response.end(
+                    JSON.stringify({
+                      status: 200,
+                      success: true,
+                      data: result,
+                    })
+                  );
+                }
+              });
+            }
+          }
+        });
+      } else {
+        response.end(
+          JSON.stringify({
+            status: 202,
+            success: false,
+            message: 'Invalid parameters',
+          })
+        );
       }
-    );
-  },
-  getUserInfo: (userData, callback) => {
-    db.query(
-      'select username from users where id = ?',
-      [userData],
-      (error, result) => {
-        if (!error) {
-          if (result.length > 0) callback(0, result);
-        } else callback(error);
+    },
+    signIn: (userData, apiKey) => {
+      console.log(userData.username, userData.password);
+      if (
+        userData.username === undefined ||
+        userData.username == null ||
+        userData.password ||
+        null ||
+        userData.password === undefined
+      ) {
+        Auth.apiAuthentication(apiKey, (err, result) => {
+          if (err)
+            response.end(
+              JSON.stringify({
+                id: 2,
+                status: 500,
+                success: false,
+                message: 'Internal server error',
+              })
+            );
+          else {
+            if (result === false) {
+              response.end(
+                JSON.stringify({
+                  status: 401,
+                  success: false,
+                  message: 'Not authorized',
+                })
+              );
+            } else {
+              users.login(userData, (err, result) => {
+                if (err) {
+                  response.end(
+                    JSON.stringify({
+                      status: 203,
+                      success: false,
+                      message: 'Invalid server error',
+                    })
+                  );
+                } else {
+                  response.end(
+                    JSON.stringify({
+                      status: 200,
+                      success: true,
+                      data: result,
+                    })
+                  );
+                }
+              });
+            }
+          }
+        });
+      } else {
+        response.end(
+          JSON.stringify({
+            status: 500,
+            success: false,
+            message: 'Internal server error',
+          })
+        );
       }
-    );
-  },
+    },
+    getUserInfo: (headers, userParams) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+              err,
+            })
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              })
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                    err,
+                  })
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    })
+                  );
+                } else if (userParams.user_id === undefined) {
+                  response.end(
+                    JSON.stringify({
+                      status: 201,
+                      success: false,
+                      message: 'User_id not found',
+                    })
+                  );
+                } else {
+                  let userInfo = {};
+                  users.getUserInfo(userParams.user_id, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                          err,
+                        })
+                      );
+                    } else {
+                      if (result === false) {
+                        response.end(
+                          JSON.stringify({
+                            status: 201,
+                            success: false,
+                            message: 'No such project exists for user',
+                          })
+                        );
+                      } else {
+                        userInfo = { ...userInfo, ...result[0] };
+                        tasks.countTask(
+                          userParams.user_id,
+                          userParams.project_id,
+                          userParams.status_id,
+                          (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: err,
+                                })
+                              );
+                            } else {
+                              userInfo = { ...userInfo, ...result[0] };
+                              response.end(
+                                JSON.stringify({
+                                  status: 200,
+                                  success: true,
+                                  data: userInfo,
+                                })
+                              );
+                            }
+                          }
+                        );
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
+    },
+  };
 };
