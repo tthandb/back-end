@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 24, 2020 at 04:42 PM
+-- Host: localhost
+-- Generation Time: Nov 27, 2020 at 06:43 PM
 -- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,17 +29,15 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `api_auth` (
   `id` int(11) NOT NULL,
-  `api_token` varchar(100) NOT NULL,
-  `date_added` datetime DEFAULT NULL,
-  `date_modified` datetime DEFAULT NULL
+  `api_token` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `api_auth`
 --
 
-INSERT INTO `api_auth` (`id`, `api_token`, `date_added`, `date_modified`) VALUES
-(1, 'ahjgdj87698bjb89#sfksdfsfb#278', NULL, NULL);
+INSERT INTO `api_auth` (`id`, `api_token`) VALUES
+(1, 'ahjgdj87698bjb89#sfksdfsfb#278');
 
 -- --------------------------------------------------------
 
@@ -61,6 +59,29 @@ INSERT INTO `projects` (`project_id`, `project_name`) VALUES
 (4, 'project 4'),
 (5, 'project 5'),
 (6, 'project 6');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `session_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `access_token` varchar(100) NOT NULL,
+  `create_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`session_id`, `user_id`, `access_token`, `create_at`) VALUES
+(1, 4, 'we9BrGznQhM3iA1oiCj5ra&lsR$rdW@n', '2020-11-27 16:33:39'),
+(2, 4, 'dczLo4@BrR4PU#pXmFCSGcAiR3@wpCeg', '2020-11-27 16:35:14'),
+(3, 4, '2V8&i4Z&0oD3#ha1nLDaQjYTAP14ksUi', '2020-11-27 16:35:32'),
+(4, 4, 'YMJ8V&4oPdnMPVjJ9z6RLQTNKDTIehyv', '2020-11-27 16:35:38');
 
 -- --------------------------------------------------------
 
@@ -127,6 +148,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `auth_token`) VALUES
+(3, 'test2', 'eee', 'GVti2MMWt6L@BuEbKGFp2pMpIKlcagJW'),
 (4, 'binhnd', '123', 'TLy&D#aENLPm889Yh22eGlI#bImr7t1u'),
 (5, 'test', '1234', 'k@oPotFQ@12@u9jFtssOf4K&xLTIyFUZ');
 
@@ -145,6 +167,13 @@ ALTER TABLE `api_auth`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`project_id`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`session_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `statuses`
@@ -185,6 +214,12 @@ ALTER TABLE `projects`
   MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `sessions`
+--
+ALTER TABLE `sessions`
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
@@ -199,6 +234,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `tasks`
