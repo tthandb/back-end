@@ -10,7 +10,7 @@ module.exports = (response) => {
           status: 200,
           success: true,
           message: 'Homepage',
-        })
+        }),
       );
     },
     signUp: (postData, apiKey) => {
@@ -28,7 +28,7 @@ module.exports = (response) => {
                 status: 500,
                 success: false,
                 message: 'Internal server error',
-              })
+              }),
             );
           } else {
             if (result === false) {
@@ -37,7 +37,7 @@ module.exports = (response) => {
                   status: 401,
                   success: false,
                   message: 'Not authorized',
-                })
+                }),
               );
             } else {
               users.signUp(postData, (err, result) => {
@@ -47,7 +47,7 @@ module.exports = (response) => {
                       status: 500,
                       success: false,
                       message: 'username id already exists',
-                    })
+                    }),
                   );
                 } else {
                   response.end(
@@ -55,7 +55,7 @@ module.exports = (response) => {
                       status: 200,
                       success: true,
                       data: result,
-                    })
+                    }),
                   );
                 }
               });
@@ -68,7 +68,7 @@ module.exports = (response) => {
             status: 202,
             success: false,
             message: 'Invalid parameters',
-          })
+          }),
         );
       }
     },
@@ -89,7 +89,7 @@ module.exports = (response) => {
                 status: 500,
                 success: false,
                 message: 'Internal server error',
-              })
+              }),
             );
           else {
             if (result === false) {
@@ -98,7 +98,7 @@ module.exports = (response) => {
                   status: 401,
                   success: false,
                   message: 'Not authorized',
-                })
+                }),
               );
             } else {
               users.login(userData, (err, result) => {
@@ -108,7 +108,8 @@ module.exports = (response) => {
                       status: 203,
                       success: false,
                       message: 'Invalid server error',
-                    })
+                      err,
+                    }),
                   );
                 } else {
                   response.end(
@@ -116,7 +117,7 @@ module.exports = (response) => {
                       status: 200,
                       success: true,
                       data: result,
-                    })
+                    }),
                   );
                 }
               });
@@ -129,9 +130,76 @@ module.exports = (response) => {
             status: 500,
             success: false,
             message: 'Internal server error',
-          })
+          }),
         );
       }
+    },
+    signOut: (headers, token) => {
+      Auth.apiAuthentication(headers.api_key, (err, result) => {
+        if (err) {
+          response.end(
+            JSON.stringify({
+              status: 500,
+              success: false,
+              message: 'Internal server error',
+            }),
+          );
+        } else {
+          if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'Not authorized',
+              }),
+            );
+          } else {
+            Auth.userAuthentication(headers, (err, result) => {
+              if (err) {
+                response.end(
+                  JSON.stringify({
+                    status: 500,
+                    success: false,
+                    message: 'Internal server error',
+                  }),
+                );
+              } else {
+                if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'user not authorized',
+                    }),
+                  );
+                } else {
+                  users.logOut(token, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 203,
+                          success: false,
+                          message: 'Invalid server error',
+                          err,
+                        }),
+                      );
+                    } else {
+                      response.end(
+                        JSON.stringify({
+                          status: 200,
+                          success: true,
+                          message: 'Log out successful'
+                        }),
+                      );
+                    }
+                  });
+
+                }
+              }
+            });
+          }
+        }
+      });
     },
     getUserInfo: (headers, userParams) => {
       Auth.apiAuthentication(headers.api_key, (err, result) => {
@@ -142,7 +210,7 @@ module.exports = (response) => {
               success: false,
               message: 'Internal server error',
               err,
-            })
+            }),
           );
         } else {
           if (result === false) {
@@ -151,7 +219,7 @@ module.exports = (response) => {
                 status: 401,
                 success: false,
                 message: 'Not authorized',
-              })
+              }),
             );
           } else {
             Auth.userAuthentication(headers, (err, result) => {
@@ -162,7 +230,7 @@ module.exports = (response) => {
                     success: false,
                     message: 'Internal server error',
                     err,
-                  })
+                  }),
                 );
               } else {
                 if (result === false) {
@@ -171,7 +239,7 @@ module.exports = (response) => {
                       status: 401,
                       success: false,
                       message: 'user not authorized',
-                    })
+                    }),
                   );
                 } else if (userParams.user_id === undefined) {
                   response.end(
@@ -179,7 +247,7 @@ module.exports = (response) => {
                       status: 201,
                       success: false,
                       message: 'User_id not found',
-                    })
+                    }),
                   );
                 } else {
                   let userInfo = {};
@@ -191,7 +259,7 @@ module.exports = (response) => {
                           success: false,
                           message: 'Internal server error',
                           err,
-                        })
+                        }),
                       );
                     } else {
                       if (result === false) {
@@ -200,7 +268,7 @@ module.exports = (response) => {
                             status: 201,
                             success: false,
                             message: 'No such project exists for user',
-                          })
+                          }),
                         );
                       } else {
                         userInfo = { ...userInfo, ...result[0] };
@@ -215,7 +283,7 @@ module.exports = (response) => {
                                   status: 500,
                                   success: false,
                                   message: err,
-                                })
+                                }),
                               );
                             } else {
                               userInfo = { ...userInfo, ...result[0] };
@@ -224,10 +292,10 @@ module.exports = (response) => {
                                   status: 200,
                                   success: true,
                                   data: userInfo,
-                                })
+                                }),
                               );
                             }
-                          }
+                          },
                         );
                       }
                     }

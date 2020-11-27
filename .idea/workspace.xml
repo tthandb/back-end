@@ -20,9 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c833155-26c4-441d-b821-a5365e455cca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.eslintrc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.prettierrc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/usersController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/users.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/test.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +35,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="TaskManager">
     <servers />
@@ -46,5 +53,35 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1825" height="177" key="GridCell.Tab.0.bottom" timestamp="1606469742627">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state width="1825" height="177" key="GridCell.Tab.0.bottom/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742627" />
+    <state width="1825" height="177" key="GridCell.Tab.0.center" timestamp="1606469742625">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state width="1825" height="177" key="GridCell.Tab.0.center/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742625" />
+    <state width="1825" height="177" key="GridCell.Tab.0.left" timestamp="1606469742623">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state width="1825" height="177" key="GridCell.Tab.0.left/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742623" />
+    <state width="1825" height="177" key="GridCell.Tab.0.right" timestamp="1606469742626">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state width="1825" height="177" key="GridCell.Tab.0.right/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742626" />
+    <state x="358" y="103" key="SettingsEditor" timestamp="1606471883681">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state x="358" y="103" key="SettingsEditor/67.34.1853.1046@67.34.1853.1046" timestamp="1606471883681" />
+    <state x="512" y="164" width="953" height="784" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1606469770625">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state x="512" y="164" width="953" height="784" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.34.1853.1046@67.34.1853.1046" timestamp="1606469770625" />
+    <state x="611" y="80" width="764" height="951" key="find.popup" timestamp="1606469532850">
+      <screen x="67" y="34" width="1853" height="1046" />
+    </state>
+    <state x="611" y="80" width="764" height="951" key="find.popup/67.34.1853.1046@67.34.1853.1046" timestamp="1606469532850" />
   </component>
 </project>

@@ -1,4 +1,4 @@
-const db= require('../config/database.js');
+const db = require('../config/database.js');
 
 module.exports = {
   signUp: (userData, callback) => {
@@ -23,13 +23,23 @@ module.exports = {
         if (!error) {
           if (result.length > 0) {
             const data = result[0];
-            db.query('insert into sessions set ?', [userData, access_token], (error, result) => {
+            db.query('insert into sessions set ?', { user_id: data.id, access_token }, (error, result) => {
               if (!error) {
-                callback(0, { ...data, token: access_token });
-              }
+                callback(0, { ...data, access_token });
+              } else callback(error);
             });
           } else callback(error);
         }
+      },
+    );
+  },
+  logOut: (token, callback) => {
+    db.query(
+      'delete from sessions where access_token = ?',
+      [token],
+      (error) => {
+        if (!error) callback(0, true);
+        else callback(error);
       },
     );
   },
