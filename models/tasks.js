@@ -3,7 +3,6 @@ let db = require('../config/database.js');
 
 module.exports = {
   createTask: (task, callback) => {
-    console.log(task);
     db.query('insert into tasks set ?', task, (error, result) => {
       if (!error) {
         let data = {
@@ -16,8 +15,8 @@ module.exports = {
       } else callback(error);
     });
   },
-  deleteTask: (user_id, task_id, callback) => {
-    module.exports.taskAuth(user_id, task_id, (err, result) => {
+  deleteTask: (task_id, callback) => {
+    module.exports.taskAuth(task_id, (err, result) => {
       if (err) callback(err);
       else if (result === true) {
         db.query(

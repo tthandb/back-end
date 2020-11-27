@@ -3,7 +3,6 @@ let db = require('../config/database.js');
 
 module.exports = {
   createProject: (project, callback) => {
-    console.log(project);
     db.query('insert into projects set ?', project, (error, result) => {
       if (!error) {
         let data = {

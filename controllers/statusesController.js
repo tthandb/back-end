@@ -1,6 +1,6 @@
-'use strict';
-let statuses = require('../models/statuses.js');
-let Auth = require('../models/authentication.js');
+"use strict";
+let statuses = require("../models/statuses.js");
+let Auth = require("../models/authentication.js");
 
 module.exports = (response) => {
   return {
@@ -11,7 +11,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -20,7 +20,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -30,7 +30,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                   })
                 );
               } else {
@@ -39,43 +39,69 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  statuses.viewStatus(statusId, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      if (result === false) {
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
                         response.end(
                           JSON.stringify({
-                            status: 201,
+                            status: 500,
                             success: false,
-                            message: 'No such status exists for user',
+                            message: "Internal server error1",
                           })
                         );
                       } else {
-                        const data = {
-                          status_id: result[0].id,
-                          status_name: result[0].name,
-                        };
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data,
-                          })
-                        );
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          statuses.viewStatus(statusId, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                })
+                              );
+                            } else {
+                              if (result === false) {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 201,
+                                    success: false,
+                                    message: "No such status exists for user",
+                                  })
+                                );
+                              } else {
+                                const data = {
+                                  status_id: result[0].id,
+                                  status_name: result[0].name,
+                                };
+                                response.end(
+                                  JSON.stringify({
+                                    status: 200,
+                                    success: true,
+                                    data,
+                                  })
+                                );
+                              }
+                            }
+                          });
+                        }
                       }
                     }
-                  });
+                  );
                 }
               }
             });
@@ -90,7 +116,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -99,7 +125,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -109,7 +135,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                   })
                 );
               } else {
@@ -118,29 +144,55 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  statuses.viewAllStatuses((err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      response.end(
-                        JSON.stringify({
-                          status: 200,
-                          success: true,
-                          data: result,
-                        })
-                      );
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
+                        response.end(
+                          JSON.stringify({
+                            status: 500,
+                            success: false,
+                            message: "Internal server error1",
+                          })
+                        );
+                      } else {
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          statuses.viewAllStatuses((err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                })
+                              );
+                            } else {
+                              response.end(
+                                JSON.stringify({
+                                  status: 200,
+                                  success: true,
+                                  data: result,
+                                })
+                              );
+                            }
+                          });
+                        }
+                      }
                     }
-                  });
+                  );
                 }
               }
             });

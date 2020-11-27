@@ -1,11 +1,5 @@
 const mysql = require('mysql2');
 const env = require('./env');
-// const db_config = {
-//   host: 'localhost',
-//   user: 'root',
-//   password: '',
-//   database: 'todo',
-// };
 let connection;
 const handleDisconnect = () => {
   connection = mysql.createConnection(env.DB_CONFIG);

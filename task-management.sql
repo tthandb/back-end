@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 27, 2020 at 06:43 PM
+-- Host: 127.0.0.1
+-- Generation Time: Nov 27, 2020 at 08:22 PM
 -- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `todo`
+-- Database: `task-management`
 --
 
 -- --------------------------------------------------------
@@ -80,8 +80,11 @@ CREATE TABLE `sessions` (
 INSERT INTO `sessions` (`session_id`, `user_id`, `access_token`, `create_at`) VALUES
 (1, 4, 'we9BrGznQhM3iA1oiCj5ra&lsR$rdW@n', '2020-11-27 16:33:39'),
 (2, 4, 'dczLo4@BrR4PU#pXmFCSGcAiR3@wpCeg', '2020-11-27 16:35:14'),
-(3, 4, '2V8&i4Z&0oD3#ha1nLDaQjYTAP14ksUi', '2020-11-27 16:35:32'),
-(4, 4, 'YMJ8V&4oPdnMPVjJ9z6RLQTNKDTIehyv', '2020-11-27 16:35:38');
+(5, 4, '9iy6pP5ZlkCoX2WzRJXwDfrDvMyrDIog', '2020-11-28 01:30:34'),
+(6, 4, 'avVL3fYxRy5EqZuc11PNrgAlgbl3kgJZ', '2020-11-28 02:11:50'),
+(7, 4, 'YI3P02b&Hb@JtAegJKgbkrGCHSu6hG$W', '2020-11-28 02:11:57'),
+(8, 4, 'S1R&ZBvr9kv$4KhyZO08m0IjAuS&TpU@', '2020-11-28 02:13:00'),
+(9, 4, 'Vs$$qxMwWqvzR5jV6$scswE3HBNnECsW', '2020-11-28 02:20:04');
 
 -- --------------------------------------------------------
 
@@ -150,7 +153,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `auth_token`) VALUES
 (3, 'test2', 'eee', 'GVti2MMWt6L@BuEbKGFp2pMpIKlcagJW'),
 (4, 'binhnd', '123', 'TLy&D#aENLPm889Yh22eGlI#bImr7t1u'),
-(5, 'test', '1234', 'k@oPotFQ@12@u9jFtssOf4K&xLTIyFUZ');
+(5, 'test', '1234', 'k@oPotFQ@12@u9jFtssOf4K&xLTIyFUZ'),
+(6, 'admin', 'admin', 'C4c@yppaDaJAOEr0KR4wQHPZnmVLEr3K');
 
 --
 -- Indexes for dumped tables
@@ -217,19 +221,19 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

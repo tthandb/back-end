@@ -17,7 +17,7 @@ module.exports = {
   login: (userData, callback) => {
     const access_token = module.exports.generateAuthToken();
     db.query(
-      'select id, username, auth_token from users where username = ? and password = ?',
+      'select id, username from users where username = ? and password = ?',
       [userData.username, userData.password],
       (error, result) => {
         if (!error) {

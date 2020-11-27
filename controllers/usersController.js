@@ -73,7 +73,6 @@ module.exports = (response) => {
       }
     },
     signIn: (userData, apiKey) => {
-      console.log(userData.username, userData.password);
       if (
         userData.username === undefined ||
         userData.username == null ||
@@ -134,7 +133,7 @@ module.exports = (response) => {
         );
       }
     },
-    signOut: (headers, token) => {
+    signOut: (headers) => {
       Auth.apiAuthentication(headers.api_key, (err, result) => {
         if (err) {
           response.end(
@@ -173,7 +172,7 @@ module.exports = (response) => {
                     }),
                   );
                 } else {
-                  users.logOut(token, (err, result) => {
+                  users.logOut(headers.access_token, (err, result) => {
                     if (err) {
                       response.end(
                         JSON.stringify({

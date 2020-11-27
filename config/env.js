@@ -3,7 +3,7 @@ module.exports = {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'todo',
+    database: 'task-management',
   },
   PORT: 2000,
 };

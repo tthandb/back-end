@@ -1,6 +1,6 @@
-'use strict';
-let tasks = require('../models/tasks.js');
-let Auth = require('../models/authentication.js');
+"use strict";
+let tasks = require("../models/tasks.js");
+let Auth = require("../models/authentication.js");
 
 module.exports = (response) => {
   return {
@@ -11,7 +11,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -20,7 +20,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -30,7 +30,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error1',
+                    message: "Internal server error1",
                   })
                 );
               } else {
@@ -39,35 +39,61 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  if (
-                    postData.user_id === null ||
-                    postData.user_id === undefined ||
-                    postData.user_id === ''
-                  )
-                    postData.user_id = headers.user_id;
-                  tasks.createTask(postData, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      response.end(
-                        JSON.stringify({
-                          status: 200,
-                          success: true,
-                          data: result,
-                        })
-                      );
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
+                        response.end(
+                          JSON.stringify({
+                            status: 500,
+                            success: false,
+                            message: "Internal server error1",
+                          })
+                        );
+                      } else {
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "Access is denied",
+                            })
+                          );
+                        } else {
+                          if (
+                            postData.user_id === null ||
+                            postData.user_id === undefined ||
+                            postData.user_id === ""
+                          )
+                            postData.user_id = headers.user_id;
+                          tasks.createTask(postData, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                })
+                              );
+                            } else {
+                              response.end(
+                                JSON.stringify({
+                                  status: 200,
+                                  success: true,
+                                  data: result,
+                                })
+                              );
+                            }
+                          });
+                        }
+                      }
                     }
-                  });
+                  );
                 }
               }
             });
@@ -82,7 +108,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -91,7 +117,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -101,7 +127,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                   })
                 );
               } else {
@@ -110,40 +136,66 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  tasks.deleteTask(headers.user_id, task_id, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                          err,
-                        })
-                      );
-                    } else {
-                      if (result === true) {
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
                         response.end(
                           JSON.stringify({
-                            status: 200,
-                            success: true,
-                            message: 'task deleted successfully',
+                            status: 500,
+                            success: false,
+                            message: "Internal server error",
                           })
                         );
                       } else {
-                        response.end(
-                          JSON.stringify({
-                            status: 201,
-                            success: false,
-                            message: 'No such task exists',
-                          })
-                        );
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          tasks.deleteTask(task_id, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                  err,
+                                })
+                              );
+                            } else {
+                              if (result === true) {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 200,
+                                    success: true,
+                                    message: "task deleted successfully",
+                                  })
+                                );
+                              } else {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 201,
+                                    success: false,
+                                    message: "No such task exists",
+                                  })
+                                );
+                              }
+                            }
+                          });
+                        }
                       }
                     }
-                  });
+                  );
                 }
               }
             });
@@ -158,7 +210,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -167,7 +219,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -177,7 +229,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                   })
                 );
               } else {
@@ -186,46 +238,72 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  tasks.viewTask(task_id, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      if (result === false) {
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
                         response.end(
                           JSON.stringify({
-                            status: 201,
+                            status: 500,
                             success: false,
-                            message: 'No such task exists for user',
+                            message: "Internal server error1",
                           })
                         );
                       } else {
-                        let data = {
-                          task_id: result[0].task_id,
-                          task_title: result[0].task_title,
-                          project_id: result[0].project_id,
-                          user_id: result[0].user_id,
-                          create_at: result[0].create_at,
-                        };
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data: data,
-                          })
-                        );
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          tasks.viewTask(task_id, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                })
+                              );
+                            } else {
+                              if (result === false) {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 201,
+                                    success: false,
+                                    message: "No such task exists for user",
+                                  })
+                                );
+                              } else {
+                                let data = {
+                                  task_id: result[0].task_id,
+                                  task_title: result[0].task_title,
+                                  project_id: result[0].project_id,
+                                  user_id: result[0].user_id,
+                                  create_at: result[0].create_at,
+                                };
+                                response.end(
+                                  JSON.stringify({
+                                    status: 200,
+                                    success: true,
+                                    data: data,
+                                  })
+                                );
+                              }
+                            }
+                          });
+                        }
                       }
                     }
-                  });
+                  );
                 }
               }
             });
@@ -240,7 +318,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -249,7 +327,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -259,7 +337,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                   })
                 );
               } else {
@@ -268,97 +346,55 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  tasks.viewAllTasks((err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      response.end(
-                        JSON.stringify({
-                          status: 200,
-                          success: true,
-                          data: result,
-                        })
-                      );
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
+                        response.end(
+                          JSON.stringify({
+                            status: 500,
+                            success: false,
+                            message: "Internal server error1",
+                          })
+                        );
+                      } else {
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          tasks.viewAllTasks((err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                })
+                              );
+                            } else {
+                              response.end(
+                                JSON.stringify({
+                                  status: 200,
+                                  success: true,
+                                  data: result,
+                                })
+                              );
+                            }
+                          });
+                        }
+                      }
                     }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
-    },
-    handleSearchTask: (headers, search_query, offset) => {
-      //check for valid api authentication
-      Auth.apiAuthentication(headers.api_key, (err, result) => {
-        if (err) {
-          response.end(
-            JSON.stringify({
-              status: 500,
-              success: false,
-              message: 'Internal server error',
-            })
-          );
-        } else {
-          if (result === false) {
-            response.end(
-              JSON.stringify({
-                status: 401,
-                success: false,
-                message: 'Not authorized',
-              })
-            );
-          } else {
-            Auth.userAuthentication(headers, (err, result) => {
-              if (err) {
-                response.end(
-                  JSON.stringify({
-                    status: 500,
-                    success: false,
-                    message: 'Internal server error',
-                  })
-                );
-              } else {
-                if (result === false) {
-                  response.end(
-                    JSON.stringify({
-                      status: 401,
-                      success: false,
-                      message: 'user not authorized',
-                    })
                   );
-                } else {
-                  //search all task having same query string
-                  tasks.searchtask(search_query, offset, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                        })
-                      );
-                    } else {
-                      //let task = [];
-                      response.end(
-                        JSON.stringify({
-                          status: 200,
-                          success: true,
-                          data: result,
-                        })
-                      );
-                    }
-                  });
                 }
               }
             });
@@ -373,7 +409,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -382,7 +418,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -392,7 +428,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                     err,
                   })
                 );
@@ -402,46 +438,72 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  tasks.updateTask(postData, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                          err,
-                        })
-                      );
-                    } else {
-                      if (result === false) {
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
                         response.end(
                           JSON.stringify({
-                            status: 201,
+                            status: 500,
                             success: false,
-                            message: 'No Such task exists for user',
+                            message: "Internal server error1",
                           })
                         );
                       } else {
-                        const data = {
-                          task_id: postData.task_id,
-                          task_title: postData.task_title,
-                          project_id: postData.project_id,
-                          user_id: postData.user_id,
-                        };
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data: data,
-                          })
-                        );
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          tasks.updateTask(postData, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                  err,
+                                })
+                              );
+                            } else {
+                              if (result === false) {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 201,
+                                    success: false,
+                                    message: "No Such task exists for user",
+                                  })
+                                );
+                              } else {
+                                const data = {
+                                  task_id: postData.task_id,
+                                  task_title: postData.task_title,
+                                  project_id: postData.project_id,
+                                  user_id: postData.user_id,
+                                };
+                                response.end(
+                                  JSON.stringify({
+                                    status: 200,
+                                    success: true,
+                                    data: data,
+                                  })
+                                );
+                              }
+                            }
+                          });
+                        }
                       }
                     }
-                  });
+                  );
                 }
               }
             });
@@ -456,7 +518,7 @@ module.exports = (response) => {
             JSON.stringify({
               status: 500,
               success: false,
-              message: 'Internal server error',
+              message: "Internal server error",
             })
           );
         } else {
@@ -465,7 +527,7 @@ module.exports = (response) => {
               JSON.stringify({
                 status: 401,
                 success: false,
-                message: 'Not authorized',
+                message: "Not authorized",
               })
             );
           } else {
@@ -475,7 +537,7 @@ module.exports = (response) => {
                   JSON.stringify({
                     status: 500,
                     success: false,
-                    message: 'Internal server error',
+                    message: "Internal server error",
                     err,
                   })
                 );
@@ -485,40 +547,66 @@ module.exports = (response) => {
                     JSON.stringify({
                       status: 401,
                       success: false,
-                      message: 'user not authorized',
+                      message: "user not authorized",
                     })
                   );
                 } else {
-                  tasks.filterTask(postData, (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: 'Internal server error',
-                          err,
-                        })
-                      );
-                    } else {
-                      if (result === false) {
+                  Auth.accessAuthentication(
+                    headers.user_id,
+                    headers.access_token,
+                    (err, result) => {
+                      if (err) {
                         response.end(
                           JSON.stringify({
-                            status: 201,
+                            status: 500,
                             success: false,
-                            message: 'No Such task exists for user',
+                            message: "Internal server error1",
                           })
                         );
                       } else {
-                        response.end(
-                          JSON.stringify({
-                            status: 200,
-                            success: true,
-                            data: result,
-                          })
-                        );
+                        if (result === false) {
+                          response.end(
+                            JSON.stringify({
+                              status: 401,
+                              success: false,
+                              message: "access is denied",
+                            })
+                          );
+                        } else {
+                          tasks.filterTask(postData, (err, result) => {
+                            if (err) {
+                              response.end(
+                                JSON.stringify({
+                                  status: 500,
+                                  success: false,
+                                  message: "Internal server error",
+                                  err,
+                                })
+                              );
+                            } else {
+                              if (result === false) {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 201,
+                                    success: false,
+                                    message: "No Such task exists for user",
+                                  })
+                                );
+                              } else {
+                                response.end(
+                                  JSON.stringify({
+                                    status: 200,
+                                    success: true,
+                                    data: result,
+                                  })
+                                );
+                              }
+                            }
+                          });
+                        }
                       }
                     }
-                  });
+                  );
                 }
               }
             });
