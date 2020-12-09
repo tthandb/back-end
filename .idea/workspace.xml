@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,13 +23,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c833155-26c4-441d-b821-a5365e455cca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintrc" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/env.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/env.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/projectsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/projectsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/statusesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/statusesController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/tasksController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/tasksController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/usersController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/authentication.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/authentication.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/projects.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/projects.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/statuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/statuses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tasks.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/tasks.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/test.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,11 +49,54 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
+  <component name="ProjectId" id="1lQHiOaJ9k2dWmD52CsDCqBcPIj" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
+    <property name="javascript.nodejs.core.library.typings.version" value="14.14.11" />
+    <property name="js.linters.configure.manually.selectedeslint" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6c833155-26c4-441d-b821-a5365e455cca" name="Default Changelist" comment="" />
+      <created>1607522521144</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607522521144</updated>
+      <workItem from="1607522522262" duration="652000" />
+      <workItem from="1607523190544" duration="3193000" />
+      <workItem from="1607527263517" duration="3065000" />
+      <workItem from="1607531428670" duration="761000" />
+      <workItem from="1607532205349" duration="1018000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -54,34 +110,11 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="WindowStateProjectService">
-    <state width="1825" height="177" key="GridCell.Tab.0.bottom" timestamp="1606469742627">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state width="1825" height="177" key="GridCell.Tab.0.bottom/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742627" />
-    <state width="1825" height="177" key="GridCell.Tab.0.center" timestamp="1606469742625">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state width="1825" height="177" key="GridCell.Tab.0.center/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742625" />
-    <state width="1825" height="177" key="GridCell.Tab.0.left" timestamp="1606469742623">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state width="1825" height="177" key="GridCell.Tab.0.left/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742623" />
-    <state width="1825" height="177" key="GridCell.Tab.0.right" timestamp="1606469742626">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state width="1825" height="177" key="GridCell.Tab.0.right/67.34.1853.1046@67.34.1853.1046" timestamp="1606469742626" />
-    <state x="358" y="103" key="SettingsEditor" timestamp="1606471883681">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state x="358" y="103" key="SettingsEditor/67.34.1853.1046@67.34.1853.1046" timestamp="1606471883681" />
-    <state x="512" y="164" width="953" height="784" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1606469770625">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state x="512" y="164" width="953" height="784" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.34.1853.1046@67.34.1853.1046" timestamp="1606469770625" />
-    <state x="611" y="80" width="764" height="951" key="find.popup" timestamp="1606469532850">
-      <screen x="67" y="34" width="1853" height="1046" />
-    </state>
-    <state x="611" y="80" width="764" height="951" key="find.popup/67.34.1853.1046@67.34.1853.1046" timestamp="1606469532850" />
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

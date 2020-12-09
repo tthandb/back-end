@@ -1,48 +1,45 @@
-'use strict';
-let db = require('../config/database.js');
+const db = require('../config/database.js')
 
 module.exports = {
-  viewStatus: (status_id, callback) => {
-    module.exports.checkStatusExist(status_id, (err, result) => {
+  viewStatus: (statusId, callback) => {
+    module.exports.checkStatusExist(statusId, (err, result) => {
       if (err) {
-        callback(err);
+        callback(err)
+      } else if (result === true) {
+        db.query(
+          'select * from statuses where id = ?',
+          [statusId],
+          (error, result) => {
+            if (!error) {
+              callback(0, result)
+            } else callback(error)
+          },
+        )
       } else {
-        if (result === true) {
-          db.query(
-            'select * from statuses where id = ?',
-            [status_id],
-            (error, result) => {
-              if (!error) {
-                callback(0, result);
-              } else callback(error);
-            }
-          );
-        } else {
-          callback(0, false);
-        }
+        callback(0, false)
       }
-    });
+    })
   },
   viewAllStatuses: (callback) => {
     db.query('select * from statuses', (error, result) => {
       if (!error) {
-        callback(0, result);
-      } else callback(error);
-    });
+        callback(0, result)
+      } else callback(error)
+    })
   },
-  checkStatusExist: (status_id, callback) => {
+  checkStatusExist: (statusId, callback) => {
     db.query(
       'select count(*) as status_count from statuses where id = ?',
-      [status_id],
+      [statusId],
       (error, rows) => {
         if (!error) {
           if (rows[0].status_count) {
-            callback(0, true);
+            callback(0, true)
           } else {
-            callback(0, false);
+            callback(0, false)
           }
-        } else callback(error);
-      }
-    );
+        } else callback(error)
+      },
+    )
   },
-};
+}

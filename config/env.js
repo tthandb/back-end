@@ -6,4 +6,4 @@ module.exports = {
     database: 'task-management',
   },
   PORT: 2000,
-};
+}
