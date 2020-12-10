@@ -1,5 +1,3 @@
-export default = {
-  checkPositiveIntegerInput: (number)=>{
-
-  }
+module.export = {
+  checkPositiveIntegerInput: (number) => number,
 }
