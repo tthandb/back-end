@@ -12,7 +12,9 @@ module.exports = {
           (error, result) => {
             if (!error) {
               callback(0, result)
-            } else callback(error)
+            } else {
+              callback(error)
+            }
           },
         )
       } else {
@@ -24,7 +26,9 @@ module.exports = {
     db.query('select * from statuses', (error, result) => {
       if (!error) {
         callback(0, result)
-      } else callback(error)
+      } else {
+        callback(error)
+      }
     })
   },
   checkStatusExist: (statusId, callback) => {
@@ -38,7 +42,9 @@ module.exports = {
           } else {
             callback(0, false)
           }
-        } else callback(error)
+        } else {
+          callback(error)
+        }
       },
     )
   },

@@ -106,6 +106,14 @@ module.exports = (response) => ({
                   err,
                 }),
               )
+            } else if (result.message === null) {
+              response.end(
+                JSON.stringify({
+                  status: 401,
+                  success: true,
+                  message: result.message,
+                }),
+              )
             } else {
               response.end(
                 JSON.stringify({

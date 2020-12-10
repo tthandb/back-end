@@ -23,22 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c833155-26c4-441d-b821-a5365e455cca" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/env.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/env.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/projectsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/projectsController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/statusesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/statusesController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/tasksController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/tasksController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/usersController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/usersController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/authentication.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/authentication.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/projects.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/projects.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/statuses.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/statuses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tasks.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/tasks.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/users.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/task-management.sql" beforeDir="false" afterPath="$PROJECT_DIR$/task-management.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,16 +48,18 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
-    <property name="javascript.nodejs.core.library.typings.version" value="14.14.11" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.20.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="12.19.8" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -76,8 +69,13 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -92,11 +90,16 @@
       <workItem from="1607527263517" duration="3065000" />
       <workItem from="1607531428670" duration="761000" />
       <workItem from="1607532205349" duration="1018000" />
+      <workItem from="1607533899441" duration="36000" />
+      <workItem from="1607533944975" duration="6740000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.sql" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
