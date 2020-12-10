@@ -1,20 +1,21 @@
 const http = require('http')
-const url = require('url')
 const env = require('./config/env')
 const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
 
-console.log(`Server listen on ${env.PORT || 2000}`)
+const baseURI = `http://localhost:${env.PORT || 2000}`
+
+console.log(`Server listen on ${baseURI}`)
 http.createServer((request, response) => {
-  const urlParts = url.parse(request.url)
-  const updatedPathName = urlParts.pathname
+  const url = new URL(baseURI + request.url)
   const userController = users(response)
   const taskController = tasks(response)
   const projectController = projects(response)
   const statusController = statuses(response)
-  switch (updatedPathName) {
+
+  switch (url.pathname) {
     case '/':
       if (request.method === 'GET') {
         userController.home()
@@ -102,8 +103,7 @@ http.createServer((request, response) => {
       break
     case '/tasks/delete':
       if (request.method === 'DELETE') {
-        const id = urlParts.query.toString().split('=')
-        const taskId = id[1]
+        const taskId = url.searchParams.get('id')
         taskController.handleDeleteTask(request.headers, parseInt(taskId, 10))
       } else {
         response.end(
@@ -131,10 +131,10 @@ http.createServer((request, response) => {
       break
     case '/task':
       if (request.method === 'GET') {
-        const params = urlParts.query
-        if (params !== null) {
-          const taskId = params.toString().split('=')[1]
-          taskController.handleViewTask(request.headers, parseInt(taskId, 10))
+        const taskId = url.searchParams.get('id')
+        console.log(taskId, parseInt(taskId, 10))
+        if (taskId !== null) {
+          taskController.handleViewTask(request.headers, taskId)
         } else taskController.handleViewAllTasks(request.headers)
       } else {
         response.end(
@@ -196,8 +196,7 @@ http.createServer((request, response) => {
       break
     case '/projects/delete':
       if (request.method === 'DELETE') {
-        const id = urlParts.query.toString().split('=')
-        const projectId = id[1]
+        const projectId = url.searchParams.get('id')
         projectController.handleDeleteProject(
           request.headers,
           parseInt(projectId, 10),
@@ -228,9 +227,8 @@ http.createServer((request, response) => {
       break
     case '/project':
       if (request.method === 'GET') {
-        const params = urlParts.query
-        if (params !== null) {
-          const projectId = params.toString().split('=')[1]
+        const projectId = url.searchParams.get('id')
+        if (projectId !== null) {
           projectController.handleViewProject(
             request.headers,
             parseInt(projectId, 10),
@@ -245,9 +243,8 @@ http.createServer((request, response) => {
 
     case '/status':
       if (request.method === 'GET') {
-        const params = urlParts.query
-        if (params !== null) {
-          const statusId = params.toString().split('=')[1]
+        const statusId = url.searchParams.get('id')
+        if (statusId !== null) {
           statusController.handleViewStatus(
             request.headers,
             parseInt(statusId, 10),

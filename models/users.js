@@ -18,7 +18,7 @@ module.exports = {
   },
   login: (userData, callback) => {
     const accessToken = module.exports.generateAuthToken()
-    db.query('select id, password from users where username = ?', userData.username, (error, result) => {
+    db.query('select id, password, auth_token from users where username = ?', userData.username, (error, result) => {
       if (!error) {
         if (result.length > 0) {
           const hashPassword = result[0].password
@@ -28,6 +28,7 @@ module.exports = {
                 callback(0, {
                   id: result[0].id,
                   username: userData.username,
+                  auth_token: result[0].auth_token,
                   access_token: accessToken,
                 })
               } else callback(error)
