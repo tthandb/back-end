@@ -83,33 +83,29 @@ module.exports = {
     })
   },
   filterTask: (task, callback) => {
-    let sql = 'select * from tasks'
-    if (task.keyword === undefined) task.keyword = ''
-    sql += ` where task_title like '%${task.keyword}%'`
-    if (
-      task.project_id !== undefined
-      || task.user_id !== undefined
-      || task.status_id !== undefined
-    ) {
-      if (task.project_id !== undefined) { sql += ` and project_id = ${task.project_id}` }
-      if (task.user_id !== undefined) sql += ` and user_id = ${task.user_id}`
-      if (task.status_id !== undefined) { sql += ` and status_id = ${task.status_id}` }
-    }
-    db.query(sql, (error, result) => {
+    task.keyword = `%${task.keyword}%`
+    const data = [task.keyword, task.project_id, task.user_id, task.status_id]
+      .filter((e) => e !== undefined)
+    let conditions = []
+    if (task.keyword !== undefined) conditions.push('task_title like ?')
+    if (task.project_id !== undefined) conditions.push('project_id = ?')
+    if (task.user_id !== undefined) conditions.push('user_id = ?')
+    if (task.status_id !== undefined) conditions.push('status_id = ?')
+    conditions = conditions.join(' && ')
+    db.query(`select * from tasks where ${conditions}`, data, (error, result) => {
       if (!error) {
         callback(0, result)
       } else callback(error)
     })
   },
   countTask: (userId, projectId, statusId, callback) => {
-    let sql = 'select count(*) as tasks from tasks where '
-    if (userId === undefined) sql += '(user_id = 1 or 1=1) '
-    else sql += `user_id = ${userId} `
-    if (projectId === undefined) sql += 'and (project_id = 1 or 1=1) '
-    else sql += `and project_id = ${projectId} `
-    if (statusId === undefined) sql += 'and (status_id = 1 or 1=1) '
-    else sql += `and status_id = ${statusId} `
-    db.query(sql, (error, result) => {
+    let conditions = []
+    const data = [userId, projectId, statusId].filter((e) => e !== undefined)
+    if (userId !== undefined) conditions.push('user_id = ?')
+    if (projectId !== undefined) conditions.push('project_id = ?')
+    if (statusId !== undefined) conditions.push('status_id = ?')
+    conditions = conditions.join(' && ')
+    db.query(`select count(*) as tasks from tasks where ${conditions}`, data, (error, result) => {
       if (!error) {
         callback(0, result)
       } else callback(error)
