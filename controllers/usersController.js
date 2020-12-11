@@ -197,6 +197,7 @@ module.exports = (response) => ({
     })
   },
   getUserInfo: (headers, userParams) => {
+    console.log(userParams.username)
     Auth.apiAuthentication(headers.api_key, (err, result) => {
       if (err) {
         response.end(
@@ -232,17 +233,16 @@ module.exports = (response) => ({
                 message: 'user not authorized',
               }),
             )
-          } else if (userParams.user_id === undefined) {
+          } else if (userParams.username === undefined) {
             response.end(
               JSON.stringify({
                 status: 201,
                 success: false,
-                message: 'User_id not found',
+                message: 'User not found',
               }),
             )
           } else {
-            let userInfo = {}
-            users.getUserInfo(userParams.userId, (err, result) => {
+            tasks.countTask(userParams, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
@@ -251,36 +251,14 @@ module.exports = (response) => ({
                     message: 'Internal server error',
                   }),
                 )
-              } else if (result === false) {
+              } else {
                 response.end(
                   JSON.stringify({
-                    status: 201,
-                    success: false,
-                    message: 'No such project exists for user',
+                    status: 200,
+                    success: true,
+                    data: { username: userParams.username, ...result[0] },
                   }),
                 )
-              } else {
-                userInfo = { ...userInfo, ...result[0] }
-                tasks.countTask(userParams, (err, result) => {
-                  if (err) {
-                    response.end(
-                      JSON.stringify({
-                        status: 500,
-                        success: false,
-                        message: err,
-                      }),
-                    )
-                  } else {
-                    userInfo = { ...userInfo, ...result[0] }
-                    response.end(
-                      JSON.stringify({
-                        status: 200,
-                        success: true,
-                        data: userInfo,
-                      }),
-                    )
-                  }
-                })
               }
             })
           }

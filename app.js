@@ -171,10 +171,10 @@ http.createServer((request, response) => {
       break
     case '/tasks/count':
       if (request.method === 'GET') {
-        const userId = checkValidInput.checkNumberInput(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
+        const username = url.searchParams.get('user')
         const projectId = checkValidInput.checkNumberInput(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
         const statusId = checkValidInput.checkNumberInput(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
-        userController.getUserInfo(request.headers, { userId, projectId, statusId })
+        userController.getUserInfo(request.headers, { username, projectId, statusId })
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),

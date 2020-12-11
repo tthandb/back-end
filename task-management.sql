@@ -81,7 +81,7 @@ INSERT INTO `sessions` (`session_id`, `user_id`, `access_token`, `create_at`) VA
 (1, 4, 'we9BrGznQhM3iA1oiCj5ra&lsR$rdW@n', '2020-11-27 16:33:39'),
 (2, 4, 'dczLo4@BrR4PU#pXmFCSGcAiR3@wpCeg', '2020-11-27 16:35:14'),
 (3, 4, '2V8&i4Z&0oD3#ha1nLDaQjYTAP14ksUi', '2020-11-27 16:35:32'),
-(4, 4, 'YMJ8V&4oPdnMPVjJ9z6RLQTNKDTIehyv', '2020-11-27 16:35:38'),
+(4, 4, 'YMJ8V&4oPdnMPVjJ9z6RLQTNKDTIehyv', '2020-11-27 16:35:38');
 
 -- --------------------------------------------------------
 

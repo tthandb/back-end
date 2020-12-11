@@ -100,14 +100,14 @@ module.exports = {
       } else callback(error)
     })
   },
-  countTask: ({ userId, projectId, statusId }, callback) => {
+  countTask: ({ username, projectId, statusId }, callback) => {
     let conditions = []
-    const data = [userId, projectId, statusId].filter((e) => e !== undefined)
-    if (userId !== undefined) conditions.push('user_id = ?')
+    const data = [username, projectId, statusId].filter((e) => e !== undefined)
+    if (username !== undefined) conditions.push('username = ?')
     if (projectId !== undefined) conditions.push('project_id = ?')
     if (statusId !== undefined) conditions.push('status_id = ?')
     conditions = conditions.join(' && ')
-    db.query(`select count(*) as tasks from tasks where ${conditions}`, data, (error, result) => {
+    db.query(`select count(*) as number_of_tasks from tasks left outer join users on users.id = tasks.user_id where ${conditions}`, data, (error, result) => {
       if (!error) {
         callback(0, result)
       } else callback(error)
