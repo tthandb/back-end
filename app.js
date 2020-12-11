@@ -4,6 +4,7 @@ const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
+const checkValidInput = require('./utils')
 
 const baseURI = `http://localhost:${env.PORT || 2000}`
 
@@ -104,7 +105,13 @@ http.createServer((request, response) => {
     case '/tasks/delete':
       if (request.method === 'DELETE') {
         const taskId = url.searchParams.get('id')
-        taskController.handleDeleteTask(request.headers, parseInt(taskId, 10))
+        if (checkValidInput.checkNumberInput(taskId)) {
+          taskController.handleDeleteTask(request.headers, taskId)
+        } else {
+          response.end(
+            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+          )
+        }
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -132,10 +139,15 @@ http.createServer((request, response) => {
     case '/task':
       if (request.method === 'GET') {
         const taskId = url.searchParams.get('id')
-        console.log(taskId, parseInt(taskId, 10))
-        if (taskId !== null) {
-          taskController.handleViewTask(request.headers, taskId)
-        } else taskController.handleViewAllTasks(request.headers)
+        if (checkValidInput.checkNumberInput(taskId)) {
+          if (taskId !== null) {
+            taskController.handleViewTask(request.headers, taskId)
+          } else taskController.handleViewAllTasks(request.headers)
+        } else {
+          response.end(
+            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+          )
+        }
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -143,17 +155,14 @@ http.createServer((request, response) => {
       }
       break
     case '/tasks/search':
-      if (request.method === 'POST') {
-        let taskData = ''
-        request.on('data', (data) => {
-          taskData += data
-        })
-        request.on('end', () => {
-          taskController.handleFilterTask(
-            JSON.parse(taskData),
-            request.headers,
-          )
-        })
+      if (request.method === 'GET') {
+        const keyword = url.searchParams.get('key')
+        const projectId = checkValidInput.checkNumberInput(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
+        const userId = checkValidInput.checkNumberInput(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
+        const statusId = checkValidInput.checkNumberInput(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
+        taskController.handleFilterTask({
+          keyword, projectId, userId, statusId,
+        }, request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -161,14 +170,11 @@ http.createServer((request, response) => {
       }
       break
     case '/tasks/count':
-      if (request.method === 'POST') {
-        let params = ''
-        request.on('data', (data) => {
-          params += data
-        })
-        request.on('end', () => {
-          userController.getUserInfo(request.headers, JSON.parse(params))
-        })
+      if (request.method === 'GET') {
+        const userId = checkValidInput.checkNumberInput(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
+        const projectId = checkValidInput.checkNumberInput(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
+        const statusId = checkValidInput.checkNumberInput(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
+        userController.getUserInfo(request.headers, { userId, projectId, statusId })
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -228,12 +234,18 @@ http.createServer((request, response) => {
     case '/project':
       if (request.method === 'GET') {
         const projectId = url.searchParams.get('id')
-        if (projectId !== null) {
-          projectController.handleViewProject(
-            request.headers,
-            parseInt(projectId, 10),
+        if (checkValidInput.checkNumberInput(projectId)) {
+          if (projectId !== null) {
+            projectController.handleViewProject(
+              request.headers,
+              projectId,
+            )
+          } else projectController.handleViewAllProjects(request.headers)
+        } else {
+          response.end(
+            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
           )
-        } else projectController.handleViewAllProjects(request.headers)
+        }
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -244,12 +256,18 @@ http.createServer((request, response) => {
     case '/status':
       if (request.method === 'GET') {
         const statusId = url.searchParams.get('id')
-        if (statusId !== null) {
-          statusController.handleViewStatus(
-            request.headers,
-            parseInt(statusId, 10),
+        if (checkValidInput.checkNumberInput(statusId)) {
+          if (statusId !== null) {
+            statusController.handleViewStatus(
+              request.headers,
+              statusId,
+            )
+          } else statusController.handleViewAllStatuses(request.headers)
+        } else {
+          response.end(
+            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
           )
-        } else statusController.handleViewAllStatuses(request.headers)
+        }
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),

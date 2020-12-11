@@ -103,7 +103,6 @@ module.exports = (response) => ({
                   status: 203,
                   success: false,
                   message: 'Invalid server error',
-                  err,
                 }),
               )
             } else if (result.message === null) {
@@ -180,7 +179,6 @@ module.exports = (response) => ({
                     status: 203,
                     success: false,
                     message: 'Invalid server error',
-                    err,
                   }),
                 )
               } else {
@@ -206,7 +204,6 @@ module.exports = (response) => ({
             status: 500,
             success: false,
             message: 'Internal server error',
-            err,
           }),
         )
       } else if (result === false) {
@@ -225,7 +222,6 @@ module.exports = (response) => ({
                 status: 500,
                 success: false,
                 message: 'Internal server error',
-                err,
               }),
             )
           } else if (result === false) {
@@ -246,14 +242,13 @@ module.exports = (response) => ({
             )
           } else {
             let userInfo = {}
-            users.getUserInfo(userParams.user_id, (err, result) => {
+            users.getUserInfo(userParams.userId, (err, result) => {
               if (err) {
                 response.end(
                   JSON.stringify({
                     status: 500,
                     success: false,
                     message: 'Internal server error',
-                    err,
                   }),
                 )
               } else if (result === false) {
@@ -266,31 +261,26 @@ module.exports = (response) => ({
                 )
               } else {
                 userInfo = { ...userInfo, ...result[0] }
-                tasks.countTask(
-                  userParams.user_id,
-                  userParams.project_id,
-                  userParams.status_id,
-                  (err, result) => {
-                    if (err) {
-                      response.end(
-                        JSON.stringify({
-                          status: 500,
-                          success: false,
-                          message: err,
-                        }),
-                      )
-                    } else {
-                      userInfo = { ...userInfo, ...result[0] }
-                      response.end(
-                        JSON.stringify({
-                          status: 200,
-                          success: true,
-                          data: userInfo,
-                        }),
-                      )
-                    }
-                  },
-                )
+                tasks.countTask(userParams, (err, result) => {
+                  if (err) {
+                    response.end(
+                      JSON.stringify({
+                        status: 500,
+                        success: false,
+                        message: err,
+                      }),
+                    )
+                  } else {
+                    userInfo = { ...userInfo, ...result[0] }
+                    response.end(
+                      JSON.stringify({
+                        status: 200,
+                        success: true,
+                        data: userInfo,
+                      }),
+                    )
+                  }
+                })
               }
             })
           }

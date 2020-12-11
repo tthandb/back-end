@@ -82,15 +82,17 @@ module.exports = {
       }
     })
   },
-  filterTask: (task, callback) => {
-    task.keyword = `%${task.keyword}%`
-    const data = [task.keyword, task.project_id, task.user_id, task.status_id]
+  filterTask: ({
+    keyword, projectId, userId, statusId,
+  },
+  callback) => {
+    keyword = `%${keyword}%`
+    const data = [keyword, projectId, userId, statusId]
       .filter((e) => e !== undefined)
-    let conditions = []
-    if (task.keyword !== undefined) conditions.push('task_title like ?')
-    if (task.project_id !== undefined) conditions.push('project_id = ?')
-    if (task.user_id !== undefined) conditions.push('user_id = ?')
-    if (task.status_id !== undefined) conditions.push('status_id = ?')
+    let conditions = ['task_title like ?']
+    if (projectId !== undefined) conditions.push('project_id = ?')
+    if (userId !== undefined) conditions.push('user_id = ?')
+    if (statusId !== undefined) conditions.push('status_id = ?')
     conditions = conditions.join(' && ')
     db.query(`select * from tasks where ${conditions}`, data, (error, result) => {
       if (!error) {
@@ -98,7 +100,7 @@ module.exports = {
       } else callback(error)
     })
   },
-  countTask: (userId, projectId, statusId, callback) => {
+  countTask: ({ userId, projectId, statusId }, callback) => {
     let conditions = []
     const data = [userId, projectId, statusId].filter((e) => e !== undefined)
     if (userId !== undefined) conditions.push('user_id = ?')

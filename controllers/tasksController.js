@@ -155,7 +155,6 @@ module.exports = (response) => ({
                           status: 500,
                           success: false,
                           message: 'Internal server error',
-                          err,
                         }),
                       )
                     } else if (result === true) {
@@ -395,7 +394,6 @@ module.exports = (response) => ({
                 status: 500,
                 success: false,
                 message: 'Internal server error',
-                err,
               }),
             )
           } else if (result === false) {
@@ -435,7 +433,6 @@ module.exports = (response) => ({
                           status: 500,
                           success: false,
                           message: 'Internal server error',
-                          err,
                         }),
                       )
                     } else if (result === false) {
@@ -496,7 +493,6 @@ module.exports = (response) => ({
                 status: 500,
                 success: false,
                 message: 'Internal server error',
-                err,
               }),
             )
           } else if (result === false) {
@@ -530,6 +526,7 @@ module.exports = (response) => ({
                   )
                 } else {
                   tasks.filterTask(postData, (err, result) => {
+                    console.log(postData)
                     if (err) {
                       response.end(
                         JSON.stringify({
