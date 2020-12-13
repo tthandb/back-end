@@ -4,7 +4,7 @@ const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
-const checkValidInput = require('./utils')
+const { validateUsername, validateNumber } = require('./utils/validation')
 
 const baseURI = `http://localhost:${env.PORT || 2000}`
 
@@ -105,7 +105,7 @@ http.createServer((request, response) => {
     case '/tasks/delete':
       if (request.method === 'DELETE') {
         const taskId = url.searchParams.get('id')
-        if (checkValidInput.checkNumberInput(taskId)) {
+        if (validateNumber(taskId)) {
           taskController.handleDeleteTask(request.headers, taskId)
         } else {
           response.end(
@@ -139,7 +139,7 @@ http.createServer((request, response) => {
     case '/task':
       if (request.method === 'GET') {
         const taskId = url.searchParams.get('id')
-        if (checkValidInput.checkNumberInput(taskId)) {
+        if (validateNumber(taskId)) {
           if (taskId !== null) {
             taskController.handleViewTask(request.headers, taskId)
           } else taskController.handleViewAllTasks(request.headers)
@@ -157,9 +157,9 @@ http.createServer((request, response) => {
     case '/tasks/search':
       if (request.method === 'GET') {
         const keyword = url.searchParams.get('key')
-        const projectId = checkValidInput.checkNumberInput(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
-        const userId = checkValidInput.checkNumberInput(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
-        const statusId = checkValidInput.checkNumberInput(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
+        const projectId = validateNumber(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
+        const userId = validateNumber(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
+        const statusId = validateNumber(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
         taskController.handleFilterTask({
           keyword, projectId, userId, statusId,
         }, request.headers)
@@ -171,9 +171,9 @@ http.createServer((request, response) => {
       break
     case '/tasks/count':
       if (request.method === 'GET') {
-        const username = url.searchParams.get('user')
-        const projectId = checkValidInput.checkNumberInput(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
-        const statusId = checkValidInput.checkNumberInput(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
+        const username = validateUsername(url.searchParams.get('user')) ? url.searchParams.get('user') : undefined
+        const projectId = validateNumber(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
+        const statusId = validateNumber(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
         userController.getUserInfo(request.headers, { username, projectId, statusId })
       } else {
         response.end(
@@ -234,7 +234,7 @@ http.createServer((request, response) => {
     case '/project':
       if (request.method === 'GET') {
         const projectId = url.searchParams.get('id')
-        if (checkValidInput.checkNumberInput(projectId)) {
+        if (validateNumber(projectId)) {
           if (projectId !== null) {
             projectController.handleViewProject(
               request.headers,
@@ -256,7 +256,7 @@ http.createServer((request, response) => {
     case '/status':
       if (request.method === 'GET') {
         const statusId = url.searchParams.get('id')
-        if (checkValidInput.checkNumberInput(statusId)) {
+        if (validateNumber(statusId)) {
           if (statusId !== null) {
             statusController.handleViewStatus(
               request.headers,
