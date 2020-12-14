@@ -139,15 +139,16 @@ http.createServer((request, response) => {
     case '/task':
       if (request.method === 'GET') {
         const taskId = url.searchParams.get('id')
-        if (validateNumber(taskId)) {
-          if (taskId !== null) {
+        if (taskId !== null) {
+          if (validateNumber(taskId)) {
             taskController.handleViewTask(request.headers, taskId)
-          } else taskController.handleViewAllTasks(request.headers)
-        } else {
-          response.end(
-            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
-          )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         }
+        else taskController.handleViewAllTasks(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -234,18 +235,19 @@ http.createServer((request, response) => {
     case '/project':
       if (request.method === 'GET') {
         const projectId = url.searchParams.get('id')
-        if (validateNumber(projectId)) {
-          if (projectId !== null) {
+        if (projectId !== null) {
+          if (validateNumber(projectId)) {
             projectController.handleViewProject(
               request.headers,
               projectId,
             )
-          } else projectController.handleViewAllProjects(request.headers)
-        } else {
-          response.end(
-            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
-          )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         }
+        else projectController.handleViewAllProjects(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -262,12 +264,13 @@ http.createServer((request, response) => {
               request.headers,
               statusId,
             )
-          } else statusController.handleViewAllStatuses(request.headers)
-        } else {
-          response.end(
-            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
-          )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         }
+        else statusController.handleViewAllStatuses(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
