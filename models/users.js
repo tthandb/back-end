@@ -41,23 +41,6 @@ module.exports = {
         }
       }
     })
-    // db.query(
-    //   'select id, username from users where username = ? and password = ?',
-    //   [userData.username, userData.password],
-    //   (error, result) => {
-    //     if (!error) {
-    //       if (result.length > 0) {
-    //         const data = result[0]
-    //         db.query('insert into sessions set ?',
-    //         { user_id: data.id, access_token: accessToken }, (error) => {
-    //           if (!error) {
-    //             callback(0, { ...data, access_token: accessToken })
-    //           } else callback(error)
-    //         })
-    //       } else callback(error)
-    //     }
-    //   },
-    // )
   },
   logOut: (token, callback) => {
     db.query(

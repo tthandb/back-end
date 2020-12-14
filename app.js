@@ -4,13 +4,13 @@ const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
-const { validateUsername, validateNumber } = require('./utils/validation')
+const { validateUsername, validateNumber, decodeURI } = require('./utils/validation')
 
 const baseURI = `http://localhost:${env.PORT || 2000}`
 
 console.log(`Server listen on ${baseURI}`)
 http.createServer((request, response) => {
-  const url = new URL(baseURI + request.url)
+  const url = new URL(baseURI + decodeURI(request.url))
   const userController = users(response)
   const taskController = tasks(response)
   const projectController = projects(response)
@@ -147,8 +147,7 @@ http.createServer((request, response) => {
               JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
             )
           }
-        }
-        else taskController.handleViewAllTasks(request.headers)
+        } else taskController.handleViewAllTasks(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -246,8 +245,7 @@ http.createServer((request, response) => {
               JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
             )
           }
-        }
-        else projectController.handleViewAllProjects(request.headers)
+        } else projectController.handleViewAllProjects(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -269,8 +267,7 @@ http.createServer((request, response) => {
               JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
             )
           }
-        }
-        else statusController.handleViewAllStatuses(request.headers)
+        } else statusController.handleViewAllStatuses(request.headers)
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
