@@ -4,8 +4,8 @@ const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
-const { escapeHtml } = require('./utils/validation')
-const { validateUsername, validateNumber, decodeURI } = require('./utils/validation')
+const { escapeHtml } = require('./utils/security')
+const { validateUsername, validateNumber, decodeURI } = require('./utils/security')
 
 const baseURI = `http://localhost:${env.PORT || 2000}`
 

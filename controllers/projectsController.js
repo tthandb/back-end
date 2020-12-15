@@ -40,7 +40,7 @@ module.exports = (response) => ({
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: 'Internal server error1',
+                      message: 'Internal server error',
                     }),
                   )
                 } else if (result === false) {
@@ -133,7 +133,7 @@ module.exports = (response) => ({
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: 'Internal server error1',
+                      message: 'Internal server error',
                     }),
                   )
                 } else if (result === false) {
@@ -230,7 +230,7 @@ module.exports = (response) => ({
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: 'Internal server error1',
+                      message: 'Internal server error',
                     }),
                   )
                 } else if (result === false) {
@@ -323,7 +323,7 @@ module.exports = (response) => ({
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: 'Internal server error1',
+                      message: 'Internal server error',
                     }),
                   )
                 } else if (result === false) {
@@ -421,7 +421,7 @@ module.exports = (response) => ({
                     JSON.stringify({
                       status: 500,
                       success: false,
-                      message: 'Internal server error1',
+                      message: 'Internal server error',
                     }),
                   )
                 } else if (result === false) {
