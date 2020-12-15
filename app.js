@@ -4,6 +4,7 @@ const users = require('./controllers/usersController.js')
 const tasks = require('./controllers/tasksController.js')
 const projects = require('./controllers/projectsController.js')
 const statuses = require('./controllers/statusesController.js')
+const { escapeHtml } = require('./utils/validation')
 const { validateUsername, validateNumber, decodeURI } = require('./utils/validation')
 
 const baseURI = `http://localhost:${env.PORT || 2000}`
@@ -36,10 +37,18 @@ http.createServer((request, response) => {
           postData += data
         })
         request.on('end', () => {
-          userController.signUp(
-            JSON.parse(postData),
-            request.headers.api_key,
-          )
+          const dataParse = JSON.parse(postData)
+          if (validateUsername(dataParse.username) && dataParse.password !== undefined) {
+            dataParse.username = escapeHtml(dataParse.username)
+            userController.signUp(
+              dataParse,
+              request.headers.api_key,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(
@@ -57,10 +66,18 @@ http.createServer((request, response) => {
           userData += data
         })
         request.on('end', () => {
-          userController.signIn(
-            JSON.parse(userData),
-            request.headers.api_key,
-          )
+          const dataParse = JSON.parse(userData)
+          if (validateUsername(dataParse.username) && dataParse.password !== undefined) {
+            dataParse.username = escapeHtml(dataParse.username)
+            userController.signIn(
+              dataParse,
+              request.headers.api_key,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(
@@ -91,10 +108,20 @@ http.createServer((request, response) => {
           taskData += data
         })
         request.on('end', () => {
-          taskController.handleCreateTask(
-            JSON.parse(taskData),
-            request.headers,
-          )
+          const dataParse = JSON.parse(taskData)
+          if (dataParse.task_title !== undefined
+            && validateNumber(dataParse.project_id)
+            && validateNumber(dataParse.user_id)) {
+            dataParse.task_title = escapeHtml(dataParse.task_title)
+            taskController.handleCreateTask(
+              dataParse,
+              request.headers,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(
@@ -125,10 +152,23 @@ http.createServer((request, response) => {
           taskData += data
         })
         request.on('end', () => {
-          taskController.handleUpdateTask(
-            JSON.parse(taskData),
-            request.headers,
-          )
+          const dataParse = JSON.parse(taskData)
+          if (dataParse.task_title !== undefined
+            && validateNumber(dataParse.project_id)
+            && validateNumber(dataParse.task_id)
+            && validateNumber(dataParse.user_id)
+            && validateNumber(dataParse.status_id)
+          ) {
+            dataParse.project_name = escapeHtml(dataParse.project_name)
+            taskController.handleUpdateTask(
+              dataParse,
+              request.headers,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(
@@ -156,7 +196,7 @@ http.createServer((request, response) => {
       break
     case '/tasks/search':
       if (request.method === 'GET') {
-        const keyword = url.searchParams.get('key')
+        const keyword = escapeHtml(url.searchParams.get('key'))
         const projectId = validateNumber(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
         const userId = validateNumber(url.searchParams.get('user_id')) ? url.searchParams.get('user_id') : undefined
         const statusId = validateNumber(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
@@ -189,10 +229,18 @@ http.createServer((request, response) => {
           projectData += data
         })
         request.on('end', () => {
-          projectController.handleCreateProject(
-            JSON.parse(projectData),
-            request.headers,
-          )
+          const dataParse = JSON.parse(projectData)
+          if (dataParse.project_name !== undefined) {
+            dataParse.project_name = escapeHtml(dataParse.project_name)
+            projectController.handleCreateProject(
+              dataParse,
+              request.headers,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(
@@ -203,10 +251,13 @@ http.createServer((request, response) => {
     case '/projects/delete':
       if (request.method === 'DELETE') {
         const projectId = url.searchParams.get('id')
-        projectController.handleDeleteProject(
-          request.headers,
-          parseInt(projectId, 10),
-        )
+        if (validateNumber(projectId)) {
+          projectController.handleDeleteProject(request.headers, projectId)
+        } else {
+          response.end(
+            JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+          )
+        }
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
@@ -220,10 +271,18 @@ http.createServer((request, response) => {
           projectData += data
         })
         request.on('end', () => {
-          projectController.handleUpdateProject(
-            JSON.parse(projectData),
-            request.headers,
-          )
+          const dataParse = JSON.parse(projectData)
+          if (dataParse.project_name !== undefined && validateNumber(dataParse.project_id)) {
+            dataParse.project_name = escapeHtml(dataParse.project_name)
+            projectController.handleUpdateProject(
+              projectData,
+              request.headers,
+            )
+          } else {
+            response.end(
+              JSON.stringify({ status: 422, message: 'Unprocessable Entity' }),
+            )
+          }
         })
       } else {
         response.end(

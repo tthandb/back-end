@@ -1,9 +1,9 @@
 module.exports = {
   DB_CONFIG: {
-    host: '172.18.0.3',
+    host: 'localhost',
     user: 'root',
-    password: '123456',
-    database: 'btl',
+    password: '',
+    database: 'task-management',
   },
   PORT: 2000,
 }

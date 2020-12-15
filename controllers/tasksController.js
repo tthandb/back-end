@@ -526,7 +526,6 @@ module.exports = (response) => ({
                   )
                 } else {
                   tasks.filterTask(postData, (err, result) => {
-                    console.log(postData)
                     if (err) {
                       response.end(
                         JSON.stringify({
