@@ -1,5 +1,4 @@
 const users = require('../models/users.js')
-const tasks = require('../models/tasks.js')
 const Auth = require('../models/authentication.js')
 
 module.exports = (response) => ({
