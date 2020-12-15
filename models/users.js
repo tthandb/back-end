@@ -52,16 +52,12 @@ module.exports = {
       },
     )
   },
-  getUserInfo: (userData, callback) => {
-    db.query(
-      'select username from users where id = ?',
-      [userData],
-      (error, result) => {
-        if (!error) {
-          if (result.length > 0) callback(0, result)
-        } else callback(error)
-      },
-    )
+  getAllUsers: (callback) => {
+    db.query('select username from users ', (error, result) => {
+      if (!error) {
+        if (result.length > 0) callback(0, result)
+      } else callback(error)
+    })
   },
   generateAuthToken: () => {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$&'

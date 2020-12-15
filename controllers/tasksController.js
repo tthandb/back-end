@@ -264,6 +264,7 @@ module.exports = (response) => ({
                         task_title: result[0].task_title,
                         project_id: result[0].project_id,
                         user_id: result[0].user_id,
+                        username: result[0].username,
                         create_at: result[0].create_at,
                       }
                       response.end(
@@ -549,6 +550,91 @@ module.exports = (response) => ({
                           status: 200,
                           success: true,
                           data: result,
+                        }),
+                      )
+                    }
+                  })
+                }
+              },
+            )
+          }
+        })
+      }
+    })
+  },
+  handleCountTasks: (headers, userParams) => {
+    Auth.apiAuthentication(headers.api_key, (err, result) => {
+      if (err) {
+        response.end(
+          JSON.stringify({
+            status: 500,
+            success: false,
+            message: 'Internal server error',
+          }),
+        )
+      } else if (result === false) {
+        response.end(
+          JSON.stringify({
+            status: 401,
+            success: false,
+            message: 'Not authorized',
+          }),
+        )
+      } else {
+        Auth.userAuthentication(headers, (err, result) => {
+          if (err) {
+            response.end(
+              JSON.stringify({
+                status: 500,
+                success: false,
+                message: 'Internal server error',
+              }),
+            )
+          } else if (result === false) {
+            response.end(
+              JSON.stringify({
+                status: 401,
+                success: false,
+                message: 'user not authorized',
+              }),
+            )
+          } else {
+            Auth.accessAuthentication(
+              headers.user_id,
+              headers.access_token,
+              (err, result) => {
+                if (err) {
+                  response.end(
+                    JSON.stringify({
+                      status: 500,
+                      success: false,
+                      message: 'Internal server error',
+                    }),
+                  )
+                } else if (result === false) {
+                  response.end(
+                    JSON.stringify({
+                      status: 401,
+                      success: false,
+                      message: 'access is denied',
+                    }),
+                  )
+                } else {
+                  tasks.countTask(userParams, (err, result) => {
+                    if (err) {
+                      response.end(
+                        JSON.stringify({
+                          status: 500,
+                          success: false,
+                          message: 'Internal server error',
+                        }),
+                      )
+                    } else {
+                      response.end(
+                        JSON.stringify({
+                          status: 200,
+                          success: true,
+                          data: { username: userParams.username, ...result[0] },
                         }),
                       )
                     }

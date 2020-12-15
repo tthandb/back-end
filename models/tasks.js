@@ -35,7 +35,7 @@ module.exports = {
         callback(err)
       } else if (result === true) {
         db.query(
-          'select * from tasks where task_id = ?',
+          'select task_id, task_title, project_id, user_id, username, status_id, create_at from tasks left outer join users on user_id = id where task_id = ?',
           [taskId],
           (error, result) => {
             if (!error) {
@@ -49,7 +49,7 @@ module.exports = {
     })
   },
   viewAllTasks: (callback) => {
-    db.query('select * from tasks', (error, result) => {
+    db.query('select task_id, task_title, project_id, user_id, username, status_id, create_at from tasks left outer join users on user_id = id', (error, result) => {
       if (!error) {
         callback(0, result)
       } else callback(error)
@@ -94,7 +94,7 @@ module.exports = {
     if (userId !== undefined) conditions.push('user_id = ?')
     if (statusId !== undefined) conditions.push('status_id = ?')
     conditions = conditions.join(' && ')
-    db.query(`select * from tasks where ${conditions}`, data, (error, result) => {
+    db.query(`select task_id, task_title, project_id, user_id, username, status_id, create_at from tasks left outer join users on user_id = id where ${conditions}`, data, (error, result) => {
       if (!error) {
         callback(0, result)
       } else callback(error)

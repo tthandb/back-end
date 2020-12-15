@@ -100,7 +100,15 @@ http.createServer((request, response) => {
         )
       }
       break
-
+    case '/users':
+      if (request.method === 'GET') {
+        userController.getAllUsers(request.headers)
+      } else {
+        response.end(
+          JSON.stringify({ status: 405, message: 'Method not allowed' }),
+        )
+      }
+      break
     case '/tasks/create':
       if (request.method === 'POST') {
         let taskData = ''
@@ -214,7 +222,7 @@ http.createServer((request, response) => {
         const username = validateUsername(url.searchParams.get('user')) ? url.searchParams.get('user') : undefined
         const projectId = validateNumber(url.searchParams.get('project_id')) ? url.searchParams.get('project_id') : undefined
         const statusId = validateNumber(url.searchParams.get('status_id')) ? url.searchParams.get('status_id') : undefined
-        userController.getUserInfo(request.headers, { username, projectId, statusId })
+        taskController.handleCountTasks(request.headers, { username, projectId, statusId })
       } else {
         response.end(
           JSON.stringify({ status: 405, message: 'Method not allowed' }),
