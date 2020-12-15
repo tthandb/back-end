@@ -267,7 +267,7 @@ module.exports = (response) => ({
                         JSON.stringify({
                           status: 200,
                           success: true,
-                          data: result.map((e) => e.username),
+                          data: result,
                         }),
                       )
                     }

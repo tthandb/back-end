@@ -356,7 +356,6 @@ module.exports = (response) => ({
                       const data = {
                         project_id: result[0].project_id,
                         project_name: result[0].project_name,
-                        tasks: [],
                       }
                       response.end(
                         JSON.stringify({

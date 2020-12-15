@@ -53,7 +53,7 @@ module.exports = {
     )
   },
   getAllUsers: (callback) => {
-    db.query('select username from users ', (error, result) => {
+    db.query('select id, username from users', (error, result) => {
       if (!error) {
         if (result.length > 0) callback(0, result)
       } else callback(error)
