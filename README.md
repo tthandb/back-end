@@ -44,7 +44,7 @@ Project of _*Web technologies and e-Services (IT4409)*_
 
 _**Created December, 2020**_ By:
 
-- [Nguyen Duc Binh](https://github.com/tthandb)
-- [Le Quang Huy](https://github.com/lqhuyhust)
-- [Mac Quang Huy](https://github.com/16HuyOnTheMic)
-- [Le Thi Huyen Thanh](https://github.com/thanhlth)
+- [Nguyen Duc Binh - 20172970](https://github.com/tthandb)
+- [Le Quang Huy - 20173173](https://github.com/lqhuyhust)
+- [Mac Quang Huy - 20173169](https://github.com/16HuyOnTheMic)
+- [Le Thi Huyen Thanh - 20173371](https://github.com/thanhlth)
